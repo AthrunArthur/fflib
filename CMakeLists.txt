@@ -2,15 +2,17 @@ cmake_minimum_required(VERSION 2.8)
 project(fflib)
 
 add_definitions(-std=c++14)
-#add_definitions(-O2)
-add_definitions(-g)
+add_definitions(-O2)
+#add_definitions(-g)
 #add_definitions(-DPROTO_BUF_SUPPORT)
 
 
+include_directories(/usr/local/include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
+link_directories(/usr/local/lib)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
@@ -44,9 +46,9 @@ target_link_libraries(net_static boost_program_options boost_system)
 set_target_properties(net_dynamic PROPERTIES OUTPUT_NAME "ff_net")
 set_target_properties(net_static  PROPERTIES OUTPUT_NAME "ff_net")
 
-#if(Release)
-#else()
+if(Release)
+else()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 add_subdirectory(example)
-#endif()
+endif()

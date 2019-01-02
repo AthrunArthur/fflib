@@ -1,0 +1,11 @@
+add_executable(ntobject use_ntobject.cpp)
+add_executable(table use_table.cpp)
+add_executable(full full_use.cpp)
+add_executable(test_transaction test_transactions.cpp)
+add_executable(test_multithread test_multithread.cpp)
+
+target_link_libraries(ntobject mysqlcppconn)
+target_link_libraries(table mysqlcppconn)
+target_link_libraries(full mysqlcppconn)
+target_link_libraries(test_transaction mysqlcppconn)
+target_link_libraries(test_multithread mysqlcppconn)

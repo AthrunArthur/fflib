@@ -36,11 +36,11 @@ template <typename T> class index : public column_base<T> {};
 
 template <typename T> class key : public column_base<T> {};
 
-template <typename TT, typename CT> struct table_column {
-  typedef TT table_type;
-  typedef CT column_type;
-  typedef typename CT::type type;
-};
+// template <typename TT, typename CT> struct table_column {
+// typedef TT table_type;
+// typedef CT column_type;
+// typedef typename CT::type type;
+//};
 
 template <typename TL> struct get_key_column_type {};
 
@@ -59,7 +59,7 @@ template <> struct get_key_column_type<ff::util::type_list<>> {
 } // namespace ff
 
 #define define_column(_name, _type, _dtype, _tname)                            \
-  struct _name : public ff::sql::_type<_dtype> {                               \
+  struct _name : public ::ff::sql::_type<_dtype> {                             \
     constexpr static const char *name = _tname;                                \
     static ff::sql::eq_cond_stmt<_name> eq(const _dtype &value) {              \
       return ff::sql::eq_cond_stmt<_name>(value);                              \
@@ -73,5 +73,15 @@ template <> struct get_key_column_type<ff::util::type_list<>> {
     static ff::sql::ge_cond_stmt<_name> ge(const _dtype &value) {              \
       return ff::sql::ge_cond_stmt<_name>(value);                              \
     }                                                                          \
-  };
+  };                                                                           \
+  namespace ff {                                                               \
+  namespace util {                                                             \
+  namespace internal {                                                         \
+  template <> struct nt_traits<_name> {                                        \
+    constexpr static const char *name = _tname;                                \
+    typedef _dtype type;                                                       \
+  };                                                                           \
+  }                                                                            \
+  }                                                                            \
+  }
 

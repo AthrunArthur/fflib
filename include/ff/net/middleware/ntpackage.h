@@ -31,48 +31,11 @@ namespace ff {
 namespace net {
 
 template <uint32_t PackgeID, typename... ARGS>
-class ntpackage : public package {
+class ntpackage : public package, public ::ff::util::ntobject<ARGS...> {
 public:
   typedef typename util::type_list<ARGS...> type_list;
 
-  ntpackage() : package(PackgeID), m_content(new content_type()) {}
-
-  template <typename CT> void set(const typename CT::type &val) {
-    static_assert(
-        util::is_type_in_type_list<CT, util::type_list<ARGS...>>::value,
-        "Cannot set a value that's not in ntpackage!");
-    const static int index =
-        util::get_index_of_type_in_typelist<CT,
-                                            util::type_list<ARGS...>>::value;
-    std::get<index>(*m_content) = val;
-  }
-
-  template <typename CT, typename CT1, typename... CARGS, typename... PARGS>
-  void set(const typename CT::type &val, const typename CT1::type &val1,
-           PARGS... params) {
-    static_assert(
-        util::is_type_in_type_list<CT, util::type_list<ARGS...>>::value,
-        "Cannot set a value that's not in ntpackage!");
-    static_assert(
-        util::is_type_in_type_list<CT1, util::type_list<ARGS...>>::value,
-        "Cannot set a value that's not in ntpackage!");
-    const static int index =
-        util::get_index_of_type_in_typelist<CT,
-                                            util::type_list<ARGS...>>::value;
-    std::get<index>(*m_content) = val;
-
-    set<CT1, CARGS...>(val1, params...);
-  }
-
-  template <typename CT> typename CT::type get() const {
-    static_assert(
-        util::is_type_in_type_list<CT, util::type_list<ARGS...>>::value,
-        "Cannot get a value that's not in the ntobject/row!");
-    const static int index =
-        util::get_index_of_type_in_typelist<CT,
-                                            util::type_list<ARGS...>>::value;
-    return std::get<index>(*m_content);
-  }
+  ntpackage() : package(PackgeID), ::ff::util::ntobject<ARGS...>() {}
 
   virtual void archive(marshaler &ar) { archive_helper<0>::run(ar, *this); }
 
@@ -89,12 +52,6 @@ protected:
     static auto run(marshaler &, VT &) ->
         typename std::enable_if<(VT::type_list::len <= Index), void>::type {}
   };
-
-protected:
-  typedef typename util::convert_type_list_to_tuple<
-      typename util::extract_content_type_list<
-          util::type_list<ARGS...>>::type>::type content_type;
-  std::unique_ptr<content_type> m_content;
 };
 } // namespace net
 } // namespace ff

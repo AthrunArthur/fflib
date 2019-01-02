@@ -21,11 +21,30 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
  *************************************************/
-#pragma once
-#include "ff/sql/columns.h"
-#include "ff/sql/join.h"
-#include "ff/sql/mysql.hpp"
-#include "ff/sql/rows.h"
-#include "ff/sql/stmt.h"
 #include "ff/sql/table.h"
 #include "ff/util/ntobject.h"
+
+define_nt(email, std::string, "email");
+define_nt(uid, uint64_t, "ui");
+define_nt(uname, std::string, "uname");
+
+int main(int argc, char *argv[]) {
+
+  typedef ff::util::ntobject<email, uid, uname> myobj_t;
+  myobj_t obj;
+  obj.set<uname>("xuepeng");
+  obj.set<uid>(122);
+  obj.set<email>("xp@example.com");
+
+  typedef ff::util::ntarray<email, uid, uname> theobjects_t;
+  typedef typename theobjects_t::row_type theobject_t;
+  theobject_t t;
+  t.set<email, uid, uname>(obj.get<email>(), obj.get<uid>(), obj.get<uname>());
+  theobjects_t obs;
+
+  obs.push_back(std::move(t));
+
+  std::cout << obs.size() << std::endl;
+
+  return 0;
+}

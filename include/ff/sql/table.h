@@ -120,7 +120,7 @@ public:
     for (size_t i = 0; i < rows.size(); ++i) {
       typename engine_type::native_statement_type stmt =
           engine->prepare_sql_with_string(ss.str());
-      row_type rt = rows[i];
+      const row_type &rt = rows[i];
       traverse_row_for_bind<self_type, 0>::run(engine, stmt, rt);
       engine->eval_native_sql_stmt(stmt);
     }
@@ -155,7 +155,7 @@ public:
     for (size_t i = 0; i < rows.size(); ++i) {
       typename engine_type::native_statement_type stmt =
           engine->prepare_sql_with_string(ss.str());
-      typename row_collection<RS...>::row_type rt = rows[i];
+      const typename row_collection<RS...>::row_type &rt = rows[i];
       int next_index = 0;
       traverse_row_for_bind_and_put_key_to_last<
           self_type, 0, util::type_list<RS...>>::run(engine, stmt, rt,

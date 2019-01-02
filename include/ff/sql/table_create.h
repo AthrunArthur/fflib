@@ -61,10 +61,10 @@ enum {
 template <typename T> struct extract_col_type {
   typedef typename T::type ct;
   const static int value = std::conditional<
-      std::is_base_of<key<ct>, T>::value, traits::int_number_type<key_type>,
+      std::is_base_of<key<ct>, T>::value, util::int_number_type<key_type>,
       typename std::conditional<std::is_base_of<index<ct>, T>::value,
-                                traits::int_number_type<index_type>,
-                                traits::int_number_type<column_type>>::type>::
+                                util::int_number_type<index_type>,
+                                util::int_number_type<column_type>>::type>::
       type::value;
 };
 template <typename T, int V = extract_col_type<T>::value>

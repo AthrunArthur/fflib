@@ -27,10 +27,11 @@
 
 define_nt(email, std::string, "email");
 define_nt(uid, uint64_t, "uid");
-define_nt(_name, std::string, "name");
+define_nt(name, std::string, "name");
+define_nt(type, std::string);
 define_nt(ns, std::vector<std::string>, "ns");
 
-typedef ff::net::ntpackage<112, email, uid, _name, ns> mypackage;
+typedef ff::net::ntpackage<112, email, uid, name, ns> mypackage;
 
 int main(int, char *[]) {
   mypackage p1;
@@ -38,7 +39,7 @@ int main(int, char *[]) {
   nss.push_back("n1");
   nss.push_back("n2");
   nss.push_back("n3");
-  p1.set<email, uid, _name>("xuepeng", 123, "xuepeng@email.com");
+  p1.set<email, uid, name>("xuepeng", 123, "xuepeng@email.com");
   p1.set<ns>(nss);
 
   ff::net::marshaler c(ff::net::marshaler::length_retriver);
@@ -55,7 +56,7 @@ int main(int, char *[]) {
 
   std::cout << "email: " << p2.get<email>() << std::endl;
   std::cout << "uid: " << p2.get<uid>() << std::endl;
-  std::cout << "_name: " << p2.get<_name>() << std::endl;
+  std::cout << "_name: " << p2.get<name>() << std::endl;
   auto tss = p2.get<ns>();
   for (size_t i = 0; i < tss.size(); ++i) {
     std::cout << "\tns: " << tss[i] << std::endl;

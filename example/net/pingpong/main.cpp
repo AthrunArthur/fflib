@@ -25,7 +25,7 @@
 #include <chrono>
 #include <iostream>
 
-define_nt(msg, std::string, "msg");
+define_nt(msg, std::string);
 define_nt(uid, uint64_t, "uid");
 
 typedef ff::net::ntpackage<110, msg, uid> ping_msg;

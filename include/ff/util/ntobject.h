@@ -22,6 +22,8 @@
   THE SOFTWARE.
  *************************************************/
 #pragma once
+#include "ff/util/internal/user_new_type.h"
+#include "ff/util/preprocessor.h"
 #include "ff/util/tuple_type.h"
 #include "ff/util/type_list.h"
 #include <memory>
@@ -62,7 +64,14 @@ public:
 
   ntobject() : m_content(new content_type()) {}
 
-  template <typename CT> void set(const typename CT::type &val) {
+  ntobject<ARGS...> make_copy() const {
+    ntobject<ARGS...> rt;
+    *rt.m_content = *m_content;
+    return rt;
+  }
+
+  template <typename CT>
+  void set(const typename internal::nt_traits<CT>::type &val) {
     static_assert(is_type_in_type_list<CT, util::type_list<ARGS...>>::value,
                   "Cannot set a value that's not in the ntobject/row!");
     const static int index =
@@ -71,7 +80,8 @@ public:
   }
 
   template <typename CT, typename CT1, typename... CARGS, typename... PARGS>
-  void set(const typename CT::type &val, const typename CT1::type &val1,
+  void set(const typename internal::nt_traits<CT>::type &val,
+           const typename internal::nt_traits<CT1>::type &val1,
            PARGS... params) {
     static_assert(is_type_in_type_list<CT, util::type_list<ARGS...>>::value,
                   "Cannot set a value that's not in the row!");
@@ -84,7 +94,7 @@ public:
     set<CT1, CARGS...>(val1, params...);
   }
 
-  template <typename CT> typename CT::type get() const {
+  template <typename CT> typename internal::nt_traits<CT>::type get() const {
     static_assert(is_type_in_type_list<CT, util::type_list<ARGS...>>::value,
                   "Cannot get a value that's not in the ntobject/row!");
     const static int index =
@@ -93,9 +103,9 @@ public:
   }
 
 protected:
-  typedef typename convert_type_list_to_tuple<
-      typename extract_content_type_list<util::type_list<ARGS...>>::type>::type
-      content_type;
+  typedef
+      typename convert_type_list_to_tuple<typename nt_extract_content_type_list<
+          util::type_list<ARGS...>>::type>::type content_type;
   std::unique_ptr<content_type> m_content;
 };
 
@@ -103,7 +113,7 @@ template <typename... ARGS> class ntarray {
 public:
   typedef ntobject<ARGS...> row_type;
 
-  void push_back(const row_type &row) { m_collection.push_back(row); }
+  void push_back(row_type &&row) { m_collection.push_back(std::move(row)); }
 
   void clear() { m_collection.clear(); }
 
@@ -134,8 +144,3 @@ template <typename... ARGS> struct is_ntarray<ntarray<ARGS...>> {
 } // namespace util
 } // namespace ff
 
-#define define_nt(_name, _dtype, _tname)                                       \
-  struct _name {                                                               \
-    constexpr static const char *name = _tname;                                \
-    typedef _dtype type;                                                       \
-  };
