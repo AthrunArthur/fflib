@@ -113,6 +113,8 @@ template <typename... ARGS> class ntarray {
 public:
   typedef ntobject<ARGS...> row_type;
 
+  void push_back(const row_type &row) { m_collection.push_back(row); }
+
   void push_back(row_type &&row) { m_collection.push_back(std::move(row)); }
 
   void clear() { m_collection.clear(); }
