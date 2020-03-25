@@ -26,10 +26,22 @@ THE SOFTWARE.
 #include "ff/util/type_list.h"
 #include <type_traits>
 
+//! 231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a is to avoid
+//! name conflict in this case:
+// struct name{
+// constexpr static const char * name = "xx";
+//};
+//
 namespace ff {
 namespace util {
 namespace internal {
-template <typename T> struct nt_traits {};
+template <typename T> struct nt_traits {
+  constexpr static const char *name =
+      T::name_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a;
+  typedef typename T::
+      type_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a
+          type;
+};
 } // namespace internal
 
 template <typename TL> struct nt_extract_content_type_list {};
@@ -55,28 +67,21 @@ template <> struct nt_extract_content_type_list<type_list<>> {
 
 #define define_nt(...) JOIN(define_nt_impl_, PP_NARG(__VA_ARGS__))(__VA_ARGS__)
 
-#define define_nt_impl_2(_name, _dtype)                                        \
-  struct _name {};                                                             \
-  namespace ff {                                                               \
-  namespace util {                                                             \
-  namespace internal {                                                         \
-  template <> struct nt_traits<_name> {                                        \
-    constexpr static const char *name = #_name;                                \
-    typedef _dtype type;                                                       \
-  };                                                                           \
-  }                                                                            \
-  }                                                                            \
-  }
+#define define_nt_impl_2(_name, _dtype)                                         \
+  struct _name {                                                                \
+    constexpr static const char *                                               \
+        name_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a = \
+            #_name;                                                             \
+    typedef _dtype                                                              \
+        type_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a;  \
+  };
 
-#define define_nt_impl_3(_name, _dtype, _tname)                                \
-  struct _name {};                                                             \
-  namespace ff {                                                               \
-  namespace util {                                                             \
-  namespace internal {                                                         \
-  template <> struct nt_traits<_name> {                                        \
-    constexpr static const char *name = _tname;                                \
-    typedef _dtype type;                                                       \
-  };                                                                           \
-  }                                                                            \
-  }                                                                            \
-  }
+#define define_nt_impl_3(_name, _dtype, _tname)                                 \
+  struct _name {                                                                \
+    constexpr static const char *                                               \
+        name_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a = \
+            _tname;                                                             \
+    typedef _dtype                                                              \
+        type_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a;  \
+  };
+
