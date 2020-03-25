@@ -309,7 +309,6 @@ public:
         cst_limit_statement<TT, CST, ARGS...> limit(int64_t count) {
           if (count <= 0) {
             throw std::runtime_error("limit count must be larger than 0");
-            return;
           }
           return cst_limit_statement<TT, CST, ARGS...>(
               m_engine, get_eval_sql_string(), count, m_cst);

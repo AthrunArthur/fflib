@@ -21,14 +21,39 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
  *************************************************/
-#pragma once
-#include "ff/util/type_list.h"
-#include <exception>
-#include <functional>
-#include <string>
-#include <type_traits>
-#include <vector>
+#include "ff/sql/table.h"
+#include "ff/util/ntobject.h"
 
-namespace ff {
-namespace sql {} // end namespace sql
-} // end namespace ff
+template <typename NT> struct my_struct {
+
+  define_nt(email, std::string, "email");
+  define_nt(uid, NT);
+  define_nt(uname, std::string, "uname");
+
+}; // namespace mn
+
+int main(int argc, char *argv[]) {
+
+  using mn = my_struct<int64_t>;
+  using email = mn::email;
+  using uid = mn::uid;
+  using uname = mn::uname;
+
+  typedef ff::util::ntobject<email, uid, uname> myobj_t;
+  myobj_t obj;
+  obj.set<uname>("xuepeng");
+  obj.set<uid>(122);
+  obj.set<email>("xp@example.com");
+
+  typedef ff::util::ntarray<email, uid, uname> theobjects_t;
+  typedef typename theobjects_t::row_type theobject_t;
+  theobject_t t;
+  t.set<email, uid, uname>(obj.get<email>(), obj.get<uid>(), obj.get<uname>());
+  theobjects_t obs;
+
+  obs.push_back(std::move(t));
+
+  std::cout << obs.size() << std::endl;
+
+  return 0;
+}

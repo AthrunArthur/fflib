@@ -27,6 +27,7 @@
 #include "ff/util/tuple_type.h"
 #include "ff/util/type_list.h"
 #include <memory>
+#include <vector>
 
 namespace ff {
 namespace util {
@@ -106,7 +107,7 @@ protected:
   typedef
       typename convert_type_list_to_tuple<typename nt_extract_content_type_list<
           util::type_list<ARGS...>>::type>::type content_type;
-  std::unique_ptr<content_type> m_content;
+  std::shared_ptr<content_type> m_content;
 };
 
 template <typename... ARGS> class ntarray {
@@ -141,6 +142,56 @@ template <typename T> struct is_ntarray { const static bool value = false; };
 
 template <typename... ARGS> struct is_ntarray<ntarray<ARGS...>> {
   const static bool value = true;
+};
+
+template <typename T> struct type_of_nt {
+  typedef typename internal::nt_traits<T>::type type;
+};
+
+template <typename T> struct name_of_nt {
+  constexpr static const char *name = internal::nt_traits<T>::name;
+};
+
+template <typename T, typename MT> struct append_type {
+  static_assert(sizeof(T) == -1, "you can only append type to ntobject");
+};
+
+template <typename MT, typename... ARGS>
+struct append_type<ntobject<ARGS...>, MT> {
+  typedef ntobject<ARGS..., MT> type;
+
+  static type value(const ntobject<ARGS...> &n,
+                    const typename type_of_nt<MT>::type &m) {
+    type t;
+    copy_helper<0>::copy(t, n);
+    t.template set<MT>(m);
+    return t;
+  }
+
+  static type value(ntobject<ARGS...> &&n,
+                    const typename type_of_nt<MT>::type &m) {
+    type t;
+    copy_helper<0>::copy(t, std::move(n));
+    t.template set<MT>(m);
+    return t;
+  }
+
+private:
+  template <int Index> struct copy_helper {
+    // TODO optimize for rvalue(&&)
+    template <typename VT1, typename VT2>
+    static auto copy(VT1 &target, VT2 &&source) -> typename std::enable_if<
+        (std::remove_reference_t<VT2>::type_list::len > Index), void>::type {
+      typedef typename get_type_at_index_in_typelist<
+          typename std::remove_reference_t<VT2>::type_list, Index>::type c_type;
+      target.template set<c_type>(source.template get<c_type>());
+      copy_helper<Index + 1>::copy(target, std::forward<VT2>(source));
+    }
+
+    template <typename VT1, typename VT2>
+    static auto copy(VT1 &target, const VT2 &source) -> typename std::enable_if<
+        (std::remove_reference_t<VT2>::type_list::len <= Index), void>::type {}
+  };
 };
 
 } // namespace util
