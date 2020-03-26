@@ -179,18 +179,18 @@ struct append_type<ntobject<ARGS...>, MT> {
 private:
   template <int Index> struct copy_helper {
     // TODO optimize for rvalue(&&)
-    template <typename VT1, typename VT2>
-    static auto copy(VT1 &target, VT2 &&source) -> typename std::enable_if<
-        (std::remove_reference_t<VT2>::type_list::len > Index), void>::type {
+    template <typename T1, typename T2>
+    static auto copy(T1 &target, T2 &&source) -> typename std::enable_if<
+        (std::remove_reference_t<T2>::type_list::len > Index), void>::type {
       typedef typename get_type_at_index_in_typelist<
-          typename std::remove_reference_t<VT2>::type_list, Index>::type c_type;
+          typename std::remove_reference_t<T2>::type_list, Index>::type c_type;
       target.template set<c_type>(source.template get<c_type>());
-      copy_helper<Index + 1>::copy(target, std::forward<VT2>(source));
+      copy_helper<Index + 1>::copy(target, std::forward<T2>(source));
     }
 
-    template <typename VT1, typename VT2>
-    static auto copy(VT1 &target, const VT2 &source) -> typename std::enable_if<
-        (std::remove_reference_t<VT2>::type_list::len <= Index), void>::type {}
+    template <typename T1, typename T2>
+    static auto copy(T1 &target, const T2 &source) -> typename std::enable_if<
+        (std::remove_reference_t<T2>::type_list::len <= Index), void>::type {}
   };
 };
 
