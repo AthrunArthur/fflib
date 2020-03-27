@@ -1,4 +1,3 @@
-
 /***********************************************
   The MIT License (MIT)
 
@@ -34,6 +33,7 @@
 #include "ff/util/preprocessor.h"
 #include "ff/util/tuple_type.h"
 #include "ff/util/type_list.h"
+#include <iostream>
 #include <iterator>
 #include <memory>
 #include <vector>
@@ -58,6 +58,10 @@ template <typename ARG, typename... ARGS>
 class nt_collect_storage<ARG, ARGS...> {
 public:
   typedef typename util::type_list<ARG, ARGS...> type_list;
+  typedef std::vector<
+      typename convert_type_list_to_tuple<typename nt_extract_content_type_list<
+          util::type_list<ARG, ARGS...>>::type>::type>
+      data_type;
 
   template <typename CT>
   void set(size_t index, const typename internal::nt_traits<CT>::type &val) {
@@ -105,6 +109,8 @@ public:
   template <typename PType> void set_from_obj(size_t index, const PType &v) {
     set_from_obj_helper<0>(index, v);
   }
+  data_type &data() { return m_data; }
+  const data_type &data() const { return m_data; }
 
 protected:
   template <int Index, typename PType>
@@ -130,6 +136,7 @@ protected:
 template <typename ARG> class nt_collect_storage<ARG> {
 public:
   typedef typename util::type_list<ARG> type_list;
+  typedef std::vector<typename nt_traits<ARG>::type> data_type;
 
   template <typename CT>
   void set(size_t index, const typename internal::nt_traits<CT>::type &val) {
@@ -152,6 +159,9 @@ public:
   template <typename PType> void set_from_obj(size_t index, const PType &v) {
     m_data[index] = v.template get<ARG>();
   }
+
+  data_type &data() { return m_data; }
+  const data_type &data() const { return m_data; }
 
 protected:
   std::vector<typename nt_traits<ARG>::type> m_data;
@@ -182,7 +192,7 @@ struct get_index_of_type_in_collect_typelist {
 template <typename TC, typename TL1, typename... TS>
 struct get_index_of_type_in_collect_typelist<TC, type_list<TL1, TS...>> {
   const static int value = std::conditional<
-      get_index_of_type_in_typelist<TC, typename TL1::type_list>::value != -1,
+      is_type_in_type_list<TC, typename TL1::type_list>::value,
       int_number_type<0>,
       int_number_type<1 + get_index_of_type_in_collect_typelist<
                               TC, type_list<TS...>>::value>>::type::value;
@@ -221,6 +231,10 @@ public:
                                               util::type_list<ARGS...>>::value;
     static_assert(CIndex != -1,
                   "Cannot get a value that's not in the nt_object!");
+
+    // std::cout << "CIndex " << CIndex << std::endl;
+    // typename internal::nt_traits<CT>::type t;
+    // return t;
     return std::get<CIndex>(m_data).template get<CT>(index);
   }
 
@@ -244,6 +258,29 @@ public:
   void clear() { clear_helper<0>(); }
 
   void pop_back() { pop_back_helper<0>(); }
+
+  template <typename CollectType>
+  auto collect() ->
+      typename internal::get_collect_storage_type<CollectType>::type::data_type
+          & {
+    const static int CIndex =
+        get_index_of_type_in_typelist<CollectType,
+                                      util::type_list<ARGS...>>::value;
+    static_assert(CIndex != -1,
+                  "Cannot set a value that's not in the nt_object!");
+    return std::get<CIndex>(m_data).data();
+  }
+  template <typename CollectType>
+  auto collect() const -> const
+      typename internal::get_collect_storage_type<CollectType>::type::data_type
+          & {
+    const static int CIndex =
+        get_index_of_type_in_typelist<CollectType,
+                                      util::type_list<ARGS...>>::value;
+    static_assert(CIndex != -1,
+                  "Cannot set a value that's not in the nt_object!");
+    return std::get<CIndex>(m_data).data();
+  }
 
 protected:
   typedef type_list<ARGS...> collect_list;
@@ -550,6 +587,18 @@ public:
     }
 
     return na;
+  }
+  template <typename CollectType>
+  auto collect() ->
+      typename internal::get_collect_storage_type<CollectType>::type::data_type
+          & {
+    return m_storage.template collect<CollectType>();
+  }
+  template <typename CollectType>
+  auto collect() const -> const
+      typename internal::get_collect_storage_type<CollectType>::type::data_type
+          & {
+    return m_storage.template collect<CollectType>();
   }
 
 protected:

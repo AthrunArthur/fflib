@@ -6,6 +6,7 @@ add_executable(test_multithread test_multithread.cpp)
 add_executable(use_ntobject_in_namespace use_ntobject_in_namespace.cpp)
 add_executable(use_ntobject_in_class use_ntobject_in_class.cpp)
 add_executable(use_ntarray use_ntarray.cpp)
+add_executable(ntarray_benchmark ntarray_benchmark.cpp)
 
 target_link_libraries(ntobject mysqlcppconn)
 target_link_libraries(table mysqlcppconn)
