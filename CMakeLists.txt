@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(fflib)
 
-add_definitions(-std=c++14)
+add_definitions(-std=c++11)
 add_definitions(-O2)
 #add_definitions(-g)
 #add_definitions(-DPROTO_BUF_SUPPORT)
