@@ -23,7 +23,6 @@ THE SOFTWARE.
 *************************************************/
 #pragma once
 #include "ff/net/common/archive.h"
-#include "ff/net/common/common.h"
 
 namespace ff {
 namespace net {

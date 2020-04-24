@@ -23,7 +23,11 @@ THE SOFTWARE.
 *************************************************/
 #pragma once
 
-#include "ff/net/common/common.h"
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <type_traits>
+#include <vector>
 
 namespace ff {
 namespace net {

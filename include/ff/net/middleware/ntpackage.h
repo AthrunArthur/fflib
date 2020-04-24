@@ -34,6 +34,7 @@ template <uint32_t PackgeID, typename... ARGS>
 class ntpackage : public package, public ::ff::util::ntobject<ARGS...> {
 public:
   typedef typename util::type_list<ARGS...> type_list;
+  const static uint32_t package_id = PackgeID;
 
   ntpackage() : package(PackgeID), ::ff::util::ntobject<ARGS...>() {}
 
