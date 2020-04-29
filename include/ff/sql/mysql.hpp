@@ -137,14 +137,29 @@ template <> class mysql<cppconn> {
 
     m_sql_driver = get_driver_instance();
     m_sql_conn.reset(m_sql_driver->connect(m_url, m_usrname, m_passwd));
-    m_sql_conn->setSchema(m_dbname);
     m_local_thread_id = std::this_thread::get_id();
+    try{
+      m_sql_conn->setSchema(m_dbname);
+      m_schema_set = true;
+    }catch(...){
+      m_schema_set = false;
+    }
   }
 
     virtual ~mysql(){
       if(m_is_worker_thread){
         m_sql_driver->threadEnd();
       }
+    }
+
+    inline bool is_ready() const{return m_schema_set;}
+
+    void create_database(){
+      if(!m_schema_set){
+        std::string sql = std::string("CREATE DATABASE IF NOT EXISTS ") + m_dbname + std::string(";");
+        eval_sql_string(sql);
+      }
+      m_sql_conn->setSchema(m_dbname);
     }
 
   protected:
@@ -235,6 +250,7 @@ template <> class mysql<cppconn> {
 protected:
   ::sql::Driver *m_sql_driver;
   std::shared_ptr<::sql::Connection> m_sql_conn;
+  bool m_schema_set;
 
   const std::string m_url;
   const std::string m_usrname;

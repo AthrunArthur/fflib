@@ -23,7 +23,9 @@ THE SOFTWARE.
 *************************************************/
 #pragma once
 
+#include <assert.h>
 #include <cstdint>
+#include <cstring>
 #include <memory>
 #include <string>
 #include <type_traits>
