@@ -32,11 +32,14 @@ class scope_guard {
   scope_guard(const scope_guard& s) = delete;
   const scope_guard& operator=(const scope_guard&) = delete;
 
+  template <typename F1> scope_guard(const F1 &dtor) : f(dtor) {}
+
   template <class F1, class F2>
   scope_guard(const F1& ctor, const F2& dtor)
       : f(dtor) {
     ctor();
   }
+
   ~scope_guard() { f(); }
 
  private:
