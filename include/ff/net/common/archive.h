@@ -33,6 +33,13 @@ THE SOFTWARE.
 
 namespace ff {
 namespace net {
+template <uint32_t PackageID, typename... ARGS> class ntpackage;
+
+template <typename T> struct is_ntpackage { const static bool value = false; };
+template <uint32_t PackageID, typename... ARGS>
+struct is_ntpackage<ntpackage<PackageID, ARGS...>> {
+  const static bool value = true;
+};
 
 //! Note, we can not use a base class and sub-classes to handle this, because we
 // have to use template method archive for different types. Remind that a

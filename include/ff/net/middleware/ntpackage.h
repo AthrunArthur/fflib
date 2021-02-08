@@ -54,6 +54,7 @@ protected:
         typename std::enable_if<(VT::type_list::len <= Index), void>::type {}
   };
 };
+
 } // namespace net
 } // namespace ff
 
