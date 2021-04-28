@@ -22,8 +22,31 @@
   THE SOFTWARE.
  *************************************************/
 #include "ff/net/middleware/ntpackage.h"
+#include <cstdint>
 #include <iostream>
 #include <vector>
+
+// extend an arbitrary type
+struct mydata {
+  uint32_t v1;
+  uint32_t v2;
+};
+namespace ff {
+namespace net {
+template <> class archive_helper<mydata> {
+public:
+  static uint32_t serialize(char *buf, const mydata &d, size_t len) {
+    memcpy(buf, (const char *)&d, sizeof(d));
+    return sizeof(d);
+  }
+  static uint32_t deserialize(const char *buf, mydata &d, size_t len) {
+    memcpy((char *)&d, buf, sizeof(d));
+    return sizeof(d);
+  }
+  static uint32_t length(mydata &d) { return sizeof(d); }
+};
+} // namespace net
+} // namespace ff
 
 define_nt(email, std::string, "email");
 define_nt(uid, uint64_t, "uid");
@@ -31,7 +54,9 @@ define_nt(name, std::string, "name");
 define_nt(type, std::string);
 define_nt(ns, std::vector<std::string>, "ns");
 
-typedef ff::net::ntpackage<112, email, uid, name, ns> mypackage;
+define_nt(data, mydata, "md");
+
+typedef ff::net::ntpackage<112, email, uid, name, ns, data> mypackage;
 
 int main(int, char *[]) {
   mypackage p1;

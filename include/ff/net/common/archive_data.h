@@ -145,3 +145,21 @@ archive(std::vector<T> &data) {
   }
 }
 
+template <class T>
+typename std::enable_if<!std::is_arithmetic<T>::value, void>::type
+archive(T &data) {
+  switch (m_iAT) {
+  case seralizer:
+    m_iBase += archive_helper<T>::serialize(m_pWriteBuf + m_iBase, data,
+                                            m_iBufLen - m_iBase);
+    break;
+  case deseralizer:
+    m_iBase += archive_helper<T>::deserialize(m_pReadBuf + m_iBase, data,
+                                              m_iBufLen - m_iBase);
+    break;
+  case length_retriver:
+    m_iBase += archive_helper<T>::length(data);
+    break;
+  }
+}
+
