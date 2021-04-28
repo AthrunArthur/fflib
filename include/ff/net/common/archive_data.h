@@ -146,7 +146,8 @@ archive(std::vector<T> &data) {
 }
 
 template <class T>
-typename std::enable_if<!std::is_arithmetic<T>::value, void>::type
+typename std::enable_if<
+    !std::is_arithmetic<T>::value && !is_ntpackage<T>::value, void>::type
 archive(T &data) {
   switch (m_iAT) {
   case seralizer:
