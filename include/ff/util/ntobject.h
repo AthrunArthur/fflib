@@ -106,6 +106,37 @@ public:
     return std::get<index>(*m_content);
   }
 
+  template <typename OT> ntobject<ARGS...> &operator=(const OT &data) {
+    if ((void *)&data == (void *)this) {
+      return *this;
+    }
+    assign_helper<OT, ARGS...>(data);
+    return *this;
+  }
+
+protected:
+  template <typename OT, typename CT>
+  auto assign_helper(const OT &data) -> typename std::enable_if<
+      is_type_in_type_list<CT, typename OT::type_list>::value, void>::type {
+    set<CT>(data.template get<CT>());
+  }
+  template <typename OT, typename CT>
+  auto assign_helper(const OT &data) -> typename std::enable_if<
+      !is_type_in_type_list<CT, typename OT::type_list>::value, void>::type {}
+
+  template <typename OT, typename CT, typename CT1, typename... CARGS>
+  auto assign_helper(const OT &data) -> typename std::enable_if<
+      is_type_in_type_list<CT, typename OT::type_list>::value, void>::type {
+    set<CT>(data.template get<CT>());
+    assign_helper<OT, CT1, CARGS...>(data);
+  }
+
+  template <typename OT, typename CT, typename CT1, typename... CARGS>
+  auto assign_helper(const OT &data) -> typename std::enable_if<
+      !is_type_in_type_list<CT, typename OT::type_list>::value, void>::type {
+    assign_helper<OT, CT1, CARGS...>(data);
+  }
+
 protected:
   std::shared_ptr<content_type> m_content;
 };
