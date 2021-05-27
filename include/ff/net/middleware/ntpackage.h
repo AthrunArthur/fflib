@@ -39,6 +39,11 @@ public:
   ntpackage() : package(PackgeID), ::ff::util::ntobject<ARGS...>() {}
 
   virtual void archive(marshaler &ar) { archive_helper<0>::run(ar, *this); }
+  ntpackage<PackgeID, ARGS...> make_copy() const {
+    ntpackage<PackgeID, ARGS...> rt;
+    *rt.m_content = *::ff::util::ntobject<ARGS...>::m_content;
+    return rt;
+  }
 
 protected:
   template <int Index> struct archive_helper {
