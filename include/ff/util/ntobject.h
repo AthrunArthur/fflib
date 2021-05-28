@@ -67,6 +67,9 @@ public:
           util::type_list<ARGS...>>::type>::type content_type;
 
   ntobject() : m_content(new content_type()) {}
+  template <typename OT> ntobject(const OT &data) {
+    assign_helper<OT, ARGS...>(data);
+  }
 
   ntobject<ARGS...> make_copy() const {
     ntobject<ARGS...> rt;

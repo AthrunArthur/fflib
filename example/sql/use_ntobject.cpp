@@ -21,6 +21,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
  *************************************************/
+#include "ff/net/middleware/ntpackage.h"
 #include "ff/sql/table.h"
 #include "ff/util/ntobject.h"
 
@@ -28,7 +29,7 @@ define_nt(email, std::string, "email");
 define_nt(uid, uint64_t, "ui");
 define_nt(uname, std::string, "uname");
 
-int main(int argc, char *argv[]) {
+void use_ntobject() {
 
   typedef ff::util::ntobject<email, uid, uname> myobj_t;
   myobj_t obj;
@@ -45,6 +46,31 @@ int main(int argc, char *argv[]) {
   obs.push_back(std::move(t));
 
   std::cout << obs.size() << std::endl;
+}
+void use_ntpackage() {
+  typedef ff::util::ntobject<email, uid, uname> myobj_t;
+  typedef ff::net::ntpackage<1, email, uid, uname> mypkg_t;
+
+  myobj_t obj;
+  obj.set<uname>("xuepeng");
+  obj.set<uid>(122);
+  obj.set<email>("xp@example.com");
+
+  // construct from other object
+  mypkg_t p = obj;
+
+  mypkg_t k;
+
+  // assign from other object
+  k = p;
+
+  obj = k;
+}
+
+int main(int argc, char *argv[]) {
+  use_ntobject();
+  use_ntpackage();
 
   return 0;
 }
+
