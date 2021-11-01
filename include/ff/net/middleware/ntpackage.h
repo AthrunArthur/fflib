@@ -37,13 +37,27 @@ public:
   const static uint32_t package_id = PackageID;
 
   ntpackage() : package(PackageID), ::ff::util::ntobject<ARGS...>() {}
-
+  template <typename OT>
+  ntpackage(const OT &data)
+      : package(PackageID), ::ff::util::ntobject<ARGS...>(data) {}
 
   ntpackage<PackageID, ARGS...> make_copy() const {
     ntpackage<PackageID, ARGS...> rt;
     using base = ::ff::util::ntobject<ARGS...>;
     *rt.base::m_content = *base::m_content;
     return rt;
+  }
+
+  ntpackage<PackageID, ARGS...> make_copy() const {
+    ntpackage<PackageID, ARGS...> rt;
+    *rt.m_content = *::ff::util::ntobject<ARGS...>::m_content;
+    return rt;
+  }
+
+  template <typename OT>
+  ntpackage<PackageID, ARGS...> &operator=(const OT &data) {
+    ::ff::util::ntobject<ARGS...>::operator=(data);
+    return *this;
   }
 
 protected:
