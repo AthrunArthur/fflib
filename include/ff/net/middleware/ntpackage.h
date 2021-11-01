@@ -48,12 +48,6 @@ public:
     return rt;
   }
 
-  ntpackage<PackageID, ARGS...> make_copy() const {
-    ntpackage<PackageID, ARGS...> rt;
-    *rt.m_content = *::ff::util::ntobject<ARGS...>::m_content;
-    return rt;
-  }
-
   template <typename OT>
   ntpackage<PackageID, ARGS...> &operator=(const OT &data) {
     ::ff::util::ntobject<ARGS...>::operator=(data);
