@@ -67,7 +67,8 @@ public:
           util::type_list<ARGS...>>::type>::type content_type;
 
   ntobject() : m_content(new content_type()) {}
-  template <typename OT> ntobject(const OT &data) {
+  template <typename OT>
+  ntobject(const OT &data) : m_content(new content_type()) {
     assign_helper<OT, ARGS...>(data);
   }
 
