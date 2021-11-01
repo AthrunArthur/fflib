@@ -44,7 +44,7 @@ archive(T &data) {
 
 template <class T>
 typename std::enable_if<is_ntpackage<T>::value, void>::type archive(T &data) {
-  data.archive(*this);
+  data.arch(*this);
 }
 
 void archive(std::string &s);

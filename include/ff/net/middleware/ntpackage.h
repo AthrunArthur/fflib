@@ -30,17 +30,25 @@ THE SOFTWARE.
 namespace ff {
 namespace net {
 
-template <uint32_t PackgeID, typename... ARGS>
+template <uint32_t PackageID, typename... ARGS>
 class ntpackage : public package, public ::ff::util::ntobject<ARGS...> {
 public:
   typedef typename util::type_list<ARGS...> type_list;
-  const static uint32_t package_id = PackgeID;
+  const static uint32_t package_id = PackageID;
 
-  ntpackage() : package(PackgeID), ::ff::util::ntobject<ARGS...>() {}
+  ntpackage() : package(PackageID), ::ff::util::ntobject<ARGS...>() {}
 
-  virtual void archive(marshaler &ar) { archive_helper<0>::run(ar, *this); }
+
+  ntpackage<PackageID, ARGS...> make_copy() const {
+    ntpackage<PackageID, ARGS...> rt;
+    using base = ::ff::util::ntobject<ARGS...>;
+    *rt.base::m_content = *base::m_content;
+    return rt;
+  }
 
 protected:
+  virtual void archive(marshaler &ar) { archive_helper<0>::run(ar, *this); }
+
   template <int Index> struct archive_helper {
     template <typename VT>
     static auto run(marshaler &ar, VT &val) ->
