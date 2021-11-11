@@ -110,6 +110,14 @@ public:
     return std::get<index>(*m_content);
   }
 
+  ntobject<ARGS...> &operator=(const ntobject<ARGS...> &data) {
+    if ((void *)&data == (void *)this) {
+      return *this;
+    }
+    assign_helper<ntobject<ARGS...>, ARGS...>(data);
+    return *this;
+  }
+
   template <typename OT> ntobject<ARGS...> &operator=(const OT &data) {
     if ((void *)&data == (void *)this) {
       return *this;
