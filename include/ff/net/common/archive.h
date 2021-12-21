@@ -53,7 +53,7 @@ struct is_ntpackage<ntpackage<PackageID, ARGS...>> {
 
 class marshaler {
 public:
-  enum marshaler_type { seralizer, deseralizer, length_retriver };
+  enum marshaler_type { serializer, deserializer, length_retriver };
 
   marshaler(const char *buf, size_t len, marshaler_type at);
 
@@ -67,9 +67,9 @@ public:
 
   marshaler_type get_marshaler_type() { return m_iAT; }
 
-  bool is_serializer() const { return m_iAT == seralizer; }
+  bool is_serializer() const { return m_iAT == serializer; }
 
-  bool is_deserializer() const { return m_iAT == deseralizer; }
+  bool is_deserializer() const { return m_iAT == deserializer; }
 
   bool is_lengther() const { return m_iAT == length_retriver; }
 
@@ -89,14 +89,14 @@ protected:
 
 template <class Ty_>
 typename std::enable_if<std::is_arithmetic<Ty_>::value, size_t>::type
-seralize(const Ty_ &val, char *pBuf) {
+serialize(const Ty_ &val, char *pBuf) {
   std::memcpy(pBuf, (const char *)&val, sizeof(Ty_));
   return sizeof(Ty_);
 }
 
 template <class Ty_>
 typename std::enable_if<std::is_arithmetic<Ty_>::value, size_t>::type
-deseralize(const char *pBuf, Ty_ &val) {
+deserialize(const char *pBuf, Ty_ &val) {
   std::memcpy((char *)&val, pBuf, sizeof(Ty_));
   return sizeof(Ty_);
 }

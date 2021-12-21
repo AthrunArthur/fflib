@@ -72,11 +72,11 @@ int main(int, char *[]) {
   size_t l = c.get_length();
   std::cout << "length: " << l << std::endl;
   char *buf = new char[l];
-  ff::net::marshaler sc(buf, l, ff::net::marshaler::seralizer);
+  ff::net::marshaler sc(buf, l, ff::net::marshaler::serializer);
   p1.arch(sc);
 
   mypackage p2;
-  ff::net::marshaler dc(buf, l, ff::net::marshaler::deseralizer);
+  ff::net::marshaler dc(buf, l, ff::net::marshaler::deserializer);
   p2.arch(dc);
 
   std::cout << "email: " << p2.get<email>() << std::endl;

@@ -29,9 +29,9 @@ namespace net {
 marshaler::marshaler(const char *buf, size_t len, marshaler_type at)
     : m_iAT(at), m_iBase(0), m_pWriteBuf(NULL), m_pReadBuf(NULL),
       m_iBufLen(len) {
-  if (m_iAT == deseralizer) {
+  if (m_iAT == deserializer) {
     m_pReadBuf = buf;
-  } else if (m_iAT == seralizer) {
+  } else if (m_iAT == serializer) {
     assert(0);
   }
 }
@@ -39,9 +39,9 @@ marshaler::marshaler(const char *buf, size_t len, marshaler_type at)
 marshaler::marshaler(char *buf, size_t len, marshaler_type at)
     : m_iAT(at), m_iBase(0), m_pWriteBuf(buf), m_pReadBuf(NULL),
       m_iBufLen(len) {
-  if (m_iAT == deseralizer) {
+  if (m_iAT == deserializer) {
     m_pReadBuf = buf;
-  } else if (m_iAT == seralizer) {
+  } else if (m_iAT == serializer) {
     m_pWriteBuf = buf;
   }
 }
@@ -54,14 +54,14 @@ marshaler::marshaler(marshaler_type at)
 void marshaler::archive(std::string &s) {
   size_t len = s.size();
   switch (get_marshaler_type()) {
-  case seralizer:
+  case serializer:
     len = s.size();
     std::memcpy(m_pWriteBuf + m_iBase, (const char *)&len, sizeof(size_t));
     m_iBase += sizeof(size_t);
     std::memcpy(m_pWriteBuf + m_iBase, s.c_str(), len);
     m_iBase += len;
     break;
-  case deseralizer:
+  case deserializer:
     std::memcpy((char *)&len, m_pReadBuf + m_iBase, sizeof(size_t));
     m_iBase += sizeof(size_t);
     s = std::string(len, '0');

@@ -68,7 +68,7 @@ typed_pkg_hub::~typed_pkg_hub() {
 package_ptr typed_pkg_hub::get_pkg(const shared_buffer &buf) {
   const char *pBuf = buf.buffer();
   uint32_t iTypeID;
-  ff::net::deseralize(pBuf, iTypeID);
+  ff::net::deserialize(pBuf, iTypeID);
 
   if (m_oPkgCreatorContainer.find(iTypeID) == m_oPkgCreatorContainer.end()) {
     assert(0 && "can't find the type id in service recv pkg set!");
@@ -77,7 +77,7 @@ package_ptr typed_pkg_hub::get_pkg(const shared_buffer &buf) {
   pkg_creator_t pkg_creator = m_oPkgCreatorContainer[iTypeID];
   package_ptr pPkg = pkg_creator();
   marshaler d(const_cast<const char *>(pBuf), buf.length(),
-              marshaler::deseralizer);
+              marshaler::deserializer);
   pPkg->arch(d);
   return pPkg;
 }

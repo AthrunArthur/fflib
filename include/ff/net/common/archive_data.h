@@ -28,11 +28,11 @@ template <class T>
 typename std::enable_if<std::is_arithmetic<T>::value, void>::type
 archive(T &data) {
   switch (m_iAT) {
-  case seralizer:
+  case serializer:
     std::memcpy(m_pWriteBuf + m_iBase, (const char *)&data, sizeof(T));
     m_iBase += sizeof(T);
     break;
-  case deseralizer:
+  case deserializer:
     std::memcpy((char *)&data, m_pReadBuf + m_iBase, sizeof(T));
     m_iBase += sizeof(T);
     break;
@@ -53,11 +53,11 @@ template <class T, size_t N>
 typename std::enable_if<std::is_arithmetic<T>::value, void>::type
 archive(T (&data)[N]) {
   switch (m_iAT) {
-  case seralizer:
+  case serializer:
     std::memcpy(m_pWriteBuf + m_iBase, (const char *)&data, sizeof(T) * N);
     m_iBase += sizeof(T) * N;
     break;
-  case deseralizer:
+  case deserializer:
     std::memcpy((char *)&data, m_pReadBuf + m_iBase, sizeof(T) * N);
     m_iBase += sizeof(T) * N;
     break;
@@ -79,11 +79,11 @@ template <class T>
 typename std::enable_if<std::is_arithmetic<T>::value, void>::type
 archive(T *&data, size_t count) {
   switch (m_iAT) {
-  case seralizer:
+  case serializer:
     std::memcpy(m_pWriteBuf + m_iBase, (const char *)data, sizeof(T) * count);
     m_iBase += sizeof(T) * count;
     break;
-  case deseralizer:
+  case deserializer:
     std::memcpy((char *)data, m_pReadBuf + m_iBase, sizeof(T) * count);
     m_iBase += sizeof(T) * count;
     break;
@@ -99,12 +99,12 @@ archive(std::vector<T> &data) {
   size_t count = data.size();
   archive(count);
   switch (m_iAT) {
-  case seralizer:
+  case serializer:
     std::memcpy(m_pWriteBuf + m_iBase, (const char *)&data.front(),
                 sizeof(T) * count);
     m_iBase += count * sizeof(T);
     break;
-  case deseralizer:
+  case deserializer:
     data.clear();
     for (int i = 0; i < count; ++i) {
       T d;
@@ -124,12 +124,12 @@ archive(std::vector<T> &data) {
   size_t count = data.size();
   archive(count);
   switch (m_iAT) {
-  case seralizer:
+  case serializer:
     for (size_t i = 0; i < data.size(); ++i) {
       archive(data[i]);
     }
     break;
-  case deseralizer:
+  case deserializer:
     data.clear();
     for (int i = 0; i < count; ++i) {
       T d;
@@ -150,11 +150,11 @@ typename std::enable_if<
     !std::is_arithmetic<T>::value && !is_ntpackage<T>::value, void>::type
 archive(T &data) {
   switch (m_iAT) {
-  case seralizer:
+  case serializer:
     m_iBase += archive_helper<T>::serialize(m_pWriteBuf + m_iBase, data,
                                             m_iBufLen - m_iBase);
     break;
-  case deseralizer:
+  case deserializer:
     m_iBase += archive_helper<T>::deserialize(m_pReadBuf + m_iBase, data,
                                               m_iBufLen - m_iBase);
     break;

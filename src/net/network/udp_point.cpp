@@ -160,7 +160,7 @@ void net_udp_point::slice_and_dispatch_pkg(net_buffer *pBuf,
     shared_buffer sb = *it;
     const char *pBuf = sb.buffer();
     uint32_t pkg_id;
-    ff::net::deseralize(pBuf, pkg_id);
+    ff::net::deserialize(pBuf, pkg_id);
     bool got_pkg_handler = false;
     std::map<uint32_t, udp_pkg_handler *>::iterator cit =
         m_oRPHCache.find(pkg_id);

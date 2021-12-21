@@ -43,14 +43,14 @@ void length_packer::pack(net_buffer &oSendBuffer, const package_ptr &pkg) {
 
   oSendBuffer.reserve_idle(static_cast<size_t>(len + sizeof(len)));
   char *pBuf = boost::asio::buffer_cast<char *>(oSendBuffer.writeable());
-  seralize(len, pBuf);
+  serialize(len, pBuf);
   oSendBuffer.filled() += sizeof(len);
   pBuf = boost::asio::buffer_cast<char *>(oSendBuffer.writeable());
-  marshaler s(pBuf, oSendBuffer.idle(), marshaler::seralizer);
+  marshaler s(pBuf, oSendBuffer.idle(), marshaler::serializer);
   pkg->arch(s);
   oSendBuffer.filled() += len;
 
-  // LOG(INFO) << "length_packer::bond(), seralize pkg: "
+  // LOG(INFO) << "length_packer::bond(), serialize pkg: "
   //<< print_buf(boost::asio::buffer_cast<const char *>(
   // oSendBuffer.readable()),
   // oSendBuffer.filled());
@@ -66,7 +66,7 @@ std::list<shared_buffer> length_packer::split(net_buffer &oRecvBuffer) {
       boost::asio::buffer_cast<const char *>(oRecvBuffer.readable());
   uint32_t buf_len = oRecvBuffer.length();
   size_t bi = 0;
-  deseralize(pBuf + bi, len);
+  deserialize(pBuf + bi, len);
 
   while (buf_len - bi >= sizeof(len) && buf_len - bi - sizeof(len) >= len) {
     // LOG(INFO) << "length_packer::split() buffer is "
@@ -80,7 +80,7 @@ std::list<shared_buffer> length_packer::split(net_buffer &oRecvBuffer) {
     resPkgs.push_back(sb);
     bi += len;
 
-    deseralize(pBuf + bi, len);
+    deserialize(pBuf + bi, len);
   }
   oRecvBuffer.read() = bi;
   if (oRecvBuffer.read() == oRecvBuffer.filled()) {
