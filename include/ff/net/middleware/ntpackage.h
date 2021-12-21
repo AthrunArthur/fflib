@@ -41,11 +41,10 @@ public:
   ntpackage(const OT &data)
       : package(PackageID), ::ff::util::ntobject<ARGS...>(data) {}
 
-  virtual void archive(marshaler &ar) { archive_helper<0>::run(ar, *this); }
-
   ntpackage<PackageID, ARGS...> make_copy() const {
     ntpackage<PackageID, ARGS...> rt;
-    *rt.m_content = *::ff::util::ntobject<ARGS...>::m_content;
+    using base = ::ff::util::ntobject<ARGS...>;
+    *rt.base::m_content = *base::m_content;
     return rt;
   }
 
@@ -56,6 +55,8 @@ public:
   }
 
 protected:
+  virtual void archive(marshaler &ar) { archive_helper<0>::run(ar, *this); }
+
   template <int Index> struct archive_helper {
     template <typename VT>
     static auto run(marshaler &ar, VT &val) ->

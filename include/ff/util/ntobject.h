@@ -67,7 +67,8 @@ public:
           util::type_list<ARGS...>>::type>::type content_type;
 
   ntobject() : m_content(new content_type()) {}
-  template <typename OT> ntobject(const OT &data) {
+  template <typename OT>
+  ntobject(const OT &data) : m_content(new content_type()) {
     assign_helper<OT, ARGS...>(data);
   }
 
@@ -107,6 +108,14 @@ public:
     const static int index =
         get_index_of_type_in_typelist<CT, util::type_list<ARGS...>>::value;
     return std::get<index>(*m_content);
+  }
+
+  ntobject<ARGS...> &operator=(const ntobject<ARGS...> &data) {
+    if ((void *)&data == (void *)this) {
+      return *this;
+    }
+    assign_helper<ntobject<ARGS...>, ARGS...>(data);
+    return *this;
   }
 
   template <typename OT> ntobject<ARGS...> &operator=(const OT &data) {
