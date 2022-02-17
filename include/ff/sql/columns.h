@@ -61,16 +61,17 @@ template <> struct get_key_column_type<ff::util::type_list<>> {
 #define define_column(_name, _type, _dtype, _tname)                            \
   struct _name : public ::ff::sql::_type<_dtype> {                             \
     constexpr static const char *name = _tname;                                \
-    static ff::sql::eq_cond_stmt<_name> eq(const _dtype &value) {              \
+    /* solve error: conversion from ‘const istream* to const istream* */       \
+    static ff::sql::eq_cond_stmt<_name> eq(_dtype const &value) {              \
       return ff::sql::eq_cond_stmt<_name>(value);                              \
     }                                                                          \
-    static ff::sql::ne_cond_stmt<_name> ne(const _dtype &value) {              \
+    static ff::sql::ne_cond_stmt<_name> ne(_dtype const &value) {              \
       return ff::sql::ne_cond_stmt<_name>(value);                              \
     }                                                                          \
-    static ff::sql::le_cond_stmt<_name> le(const _dtype &value) {              \
+    static ff::sql::le_cond_stmt<_name> le(_dtype const &value) {              \
       return ff::sql::le_cond_stmt<_name>(value);                              \
     }                                                                          \
-    static ff::sql::ge_cond_stmt<_name> ge(const _dtype &value) {              \
+    static ff::sql::ge_cond_stmt<_name> ge(_dtype const &value) {              \
       return ff::sql::ge_cond_stmt<_name>(value);                              \
     }                                                                          \
   };                                                                           \

@@ -46,21 +46,32 @@ namespace sql {
 #define impl_mysql_bind_setter(type, method) \
     template<class STMT> \
       struct mysql_bind_setter<STMT, type>{ \
-      static void bind(STMT stmt, int index, const type & value){ \
+      static void bind(STMT stmt, int index, type const & value){ \
         stmt->method(index, value); \
       } \
       };
-    impl_mysql_bind_setter(std::string, setString);
-    impl_mysql_bind_setter(int8_t, setInt);
+    impl_mysql_bind_setter(bool, setBoolean);//bool
+    impl_mysql_bind_setter(std::string, setString);//string
+    // impl_mysql_bind_setter(std::string, setDateTime);//time
+    // impl_mysql_bind_setter();
+    impl_mysql_bind_setter(int8_t, setInt);//tinyint
     impl_mysql_bind_setter(uint8_t, setUInt);
-    impl_mysql_bind_setter(int16_t, setInt);
+    impl_mysql_bind_setter(int16_t, setInt);//smallint
     impl_mysql_bind_setter(uint16_t, setUInt);
-    impl_mysql_bind_setter(int32_t, setInt);
+    impl_mysql_bind_setter(int32_t, setInt);  //int
     impl_mysql_bind_setter(uint32_t, setUInt);
-    impl_mysql_bind_setter(int64_t, setInt64);
+    impl_mysql_bind_setter(int64_t, setInt64);//bigint
     impl_mysql_bind_setter(uint64_t, setUInt64);
-    impl_mysql_bind_setter(double, setDouble);
-    impl_mysql_bind_setter(float, setDouble);
+    impl_mysql_bind_setter(double, setDouble);//double
+    impl_mysql_bind_setter(float, setDouble);//float
+    impl_mysql_bind_setter(std::istream *, setBlob);//Blob
+    // impl_mysql_bind_setter();
+/*     need to add: 
+    mediumInt; 
+    char, varchar, tingtext, text, mediumtext, longtext
+    date, time, datetime, timestamp
+    decimal */
+
 #undef impl_mysql_bind_setter
 
     template<class T>
@@ -73,7 +84,9 @@ namespace sql {
             return r->method(name); \
           } \
       }; \
-
+      
+    // impl_mysql_rs_getter(std::string, getDateTime);//no getDateTime in prepared_statement.h
+    impl_mysql_rs_getter(bool, getBoolean);
     impl_mysql_rs_getter(std::string, getString);
     impl_mysql_rs_getter(double, getDouble);
     impl_mysql_rs_getter(float, getDouble);
@@ -85,6 +98,8 @@ namespace sql {
     impl_mysql_rs_getter(uint16_t, getUInt);
     impl_mysql_rs_getter(int8_t, getInt);
     impl_mysql_rs_getter(uint8_t, getUInt);
+    impl_mysql_rs_getter(std::istream *, getBlob);
+
 #undef impl_mysql_rs_getter
 
     template<typename... ARGS>
@@ -102,7 +117,7 @@ namespace sql {
           static void set(RT & row, RST r){
             row.template set<T>(mysql_rs_getter<typename T::type>::get(r, T::name));
             mysql_record_setter<ARGS...>::set(row, r);
-          }
+          } 
       };
 
     template<typename... ARGS> class lazy_eval_string_impl{
@@ -225,7 +240,7 @@ template <> class mysql<cppconn> {
   }
   template <typename T>
   void bind_to_native_statement(native_statement_type stmt, int index,
-                                const T &value) {
+                                T const &value) {
     mysql_bind_setter<native_statement_type, T>::bind(stmt, index, value);
   }
 
