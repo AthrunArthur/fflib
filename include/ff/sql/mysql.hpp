@@ -58,7 +58,7 @@ namespace ff
   };
     impl_mysql_bind_setter(bool, setBoolean);       // bool
     impl_mysql_bind_setter(std::string, setString); // string
-    // impl_mysql_bind_setter(std::string, setDateTime);//time
+    impl_mysql_bind_setter(std::string, setDateTime);//time
     // impl_mysql_bind_setter();
     impl_mysql_bind_setter(int8_t, setInt); // tinyint
     impl_mysql_bind_setter(uint8_t, setUInt);
@@ -71,6 +71,8 @@ namespace ff
     impl_mysql_bind_setter(double, setDouble);       // double
     impl_mysql_bind_setter(float, setFloat);        // float
     impl_mysql_bind_setter(std::istream *, setBlob); // Blob
+
+
     // impl_mysql_bind_setter();
     /*     need to add:
         decimal, tiny/mediumInt 
