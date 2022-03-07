@@ -30,7 +30,7 @@ namespace ff {
 namespace sql {
 namespace internal {
 
-template <typename T> struct dump_col_type_creation {
+template <class T> struct dump_col_type_creation {
   static void dump(std::stringstream &ss) { ss << " BLOB "; }
 };
 
@@ -48,8 +48,8 @@ impl_table_dump_types(int8_t, "TINYINT");
 impl_table_dump_types(uint8_t, "TINYINT UNSIGNED");
 impl_table_dump_types(float, "FLOAT");
 impl_table_dump_types(double, "DOUBLE");
-impl_table_dump_types(std::string, "VARCHAR(255)");
-// impl_table_dump_types(std::string, "TEXT");
+// impl_table_dump_types(std::string, "VARCHAR(255)");
+impl_table_dump_types(std::string, "TEXT");
 
 //////////////////////////
 } // namespace internal

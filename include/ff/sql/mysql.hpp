@@ -24,6 +24,7 @@
 #pragma once
 
 #include "ff/sql/engine.h"
+#include "ff/sql/mysql_types.h"
 #include "ff/sql/rows.h"
 #include "ff/sql/table.h"
 #include <cppconn/driver.h>
@@ -61,6 +62,7 @@ namespace sql {
     impl_mysql_bind_setter(uint64_t, setUInt64);
     impl_mysql_bind_setter(double, setDouble);
     impl_mysql_bind_setter(float, setDouble);
+
 #undef impl_mysql_bind_setter
 
     template<class T>
