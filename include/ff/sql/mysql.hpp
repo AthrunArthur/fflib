@@ -24,6 +24,7 @@
 #pragma once
 
 #include "ff/sql/engine.h"
+#include "ff/sql/mysql_types.h"
 #include "ff/sql/rows.h"
 #include "ff/sql/table.h"
 #include <cppconn/driver.h>
@@ -39,11 +40,8 @@ namespace ff
   namespace sql
   {
 
-    template <class STMT, class T>
-    struct mysql_bind_setter
-    {
-      static void bind(STMT, int, const T &)
-      {
+    template <class STMT, class T>struct mysql_bind_setter{
+      static void bind(STMT, int, const T &){
         throw std::runtime_error("No support yet");
       }
     };
@@ -58,7 +56,7 @@ namespace ff
   };
     impl_mysql_bind_setter(bool, setBoolean);       // bool
     impl_mysql_bind_setter(std::string, setString); // string
-    impl_mysql_bind_setter(std::string, setDateTime);//time
+    // impl_mysql_bind_setter(std::string, setDateTime);//time
     // impl_mysql_bind_setter();
     impl_mysql_bind_setter(int8_t, setInt); // tinyint
     impl_mysql_bind_setter(uint8_t, setUInt);
@@ -70,15 +68,15 @@ namespace ff
     impl_mysql_bind_setter(uint64_t, setUInt64);
     impl_mysql_bind_setter(double, setDouble);       // double
     impl_mysql_bind_setter(float, setFloat);        // float
-    impl_mysql_bind_setter(std::istream *, setBlob); // Blob
+    // impl_mysql_bind_setter(std::istream *, setBlob); // Blob
 
 
     // impl_mysql_bind_setter();
     /*     need to add:
-        decimal, tiny/mediumInt 
-        
+        decimal, tiny/mediumInt
+
         char, varchar, binary, varbinary, set, enum, tinytext, text, mediumtext, longtext
-        
+
         date, time, datetime, timestamp, year
 
         geometry and json
@@ -140,7 +138,7 @@ namespace ff
     impl_mysql_rs_getter(uint16_t, getUInt);
     impl_mysql_rs_getter(int8_t, getInt);
     impl_mysql_rs_getter(uint8_t, getUInt);
-    impl_mysql_rs_getter(std::istream *, getBlob);
+    // impl_mysql_rs_getter(std::istream *, getBlob);
 
 #undef impl_mysql_rs_getter
 
