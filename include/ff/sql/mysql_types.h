@@ -24,10 +24,12 @@
 #pragma once
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
+#include "ff/sql/mysql_types_varchar.h"
+#include "ff/sql/mysql_types_text.h"
 
 namespace ff {
 namespace mysql {
-template <uint8_t Len> struct char_m {
+template <uint8_t Len> struct char_m{
 public:
   char_m() : m_data(){};
   char_m(const char *s) : m_data(s){};
@@ -42,7 +44,7 @@ public:
     return *this;
   };
 
-  const std::string &data() const { return m_data; }
+  const std::string &data() const { return m_data; }//data的作用是什么？这两行函数的作用是什么？
   std::string &data() { return m_data; }
 
 protected:
