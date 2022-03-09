@@ -15,9 +15,10 @@ struct md {
 
 using namespace ff::mysql;
 define_column(c1, column, uint64_t, "id");
-define_column(xx, column, char_m<123>, "id");
-typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, xx>
-    mytable;
+define_column(xx, column, varchar_m<5>, "id");
+define_column(yy, column, text_m, "id");
+typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, xx, yy>
+    mytable;  
 
 int main(int argc, char *argv[]) {
 
@@ -33,15 +34,16 @@ int main(int argc, char *argv[]) {
   mytable::row_collection_type rows;
 
   mytable::row_collection_type::row_type t1;
-  t1.set<c1, xx>(1, "hi");
+  t1.set<c1, xx, yy>(1, "hi", "zi");
   rows.push_back(std::move(t1));
 
   mytable::insert_or_replace_rows(&engine, rows);
 
-  auto ret1 = mytable::select<c1, xx>(&engine).eval();
+  auto ret1 = mytable::select<c1, xx, yy>(&engine).eval();
   std::cout << "size: " << ret1.size() << std::endl;
   for (size_t i = 0; i < ret1.size(); ++i) {
-    std::cout << ret1[i].get<c1>() << ", " << ret1[i].get<xx>().data()
+    std::cout << ret1[i].get<c1>() << ", " << ret1[i].get<xx>().data() << ", " 
+              << ret1[i].get<yy>().data()
               << std::endl;
   }
   std::cout << "---------------" << std::endl;

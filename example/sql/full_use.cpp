@@ -47,10 +47,10 @@ define_column(c10, column, int16_t, "i16");
 define_column(c11, column, uint8_t, "u8");
 define_column(c12, column, int8_t, "i8");
 define_column(c13, column, md, "md");
-define_column(c14, column, std::istream*, "istream");
+// define_column(c14, column, std::istream*, "istream");
 
 typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, c2, c3, c4,
-                       c5, c6, c7, c8, c9, c10, c11, c12, c14>
+                       c5, c6, c7, c8, c9, c10, c11, c12>
     mytable;
 
 int main(int argc, char *argv[]) {

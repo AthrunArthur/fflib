@@ -24,57 +24,5 @@
 #pragma once
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
-
-namespace ff {
-namespace mysql {
-template <uint8_t Len> struct char_m {
-public:
-  char_m() : m_data(){};
-  char_m(const char *s) : m_data(s){};
-  char_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  char_m(const char_m<Len> &s) : m_data(s.data()) {}
-  char_m(char_m<Len> &&s) : m_data(std::move(s.m_data)) {}
-  char_m<Len> &operator=(const char_m<Len> &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
-
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
-
-protected:
-  std::string m_data;
-};
-
-namespace internal {
-template <class T> struct dump_col_type_creation;
-template <uint8_t Len> struct dump_col_type_creation<char_m<Len>> {
-  static void dump(std::stringstream &ss) { ss << " CHAR(" << Len << ") "; }
-};
-} // namespace internal
-} // namespace mysql
-namespace sql {
-template <class STMT, class T> struct mysql_bind_setter;
-
-template <class STMT, uint8_t Len>
-struct mysql_bind_setter<STMT, ::ff::mysql::char_m<Len>> {
-  static void bind(STMT stmt, int index,
-                   const ::ff::mysql::char_m<Len> &value) {
-    stmt->setString(index, value.data());
-  }
-};
-
-template <class T> struct mysql_rs_getter;
-template <uint8_t Len> struct mysql_rs_getter<::ff::mysql::char_m<Len>> {
-  template <typename RST>
-  static ::ff::mysql::char_m<Len> get(RST r, const std::string &name) {
-    return ::ff::mysql::char_m<Len>(r->getString(name));
-  }
-};
-
-} // namespace sql
-} // namespace ff
+#include "ff/sql/mysql_types_char_varchar_text.h"
 
