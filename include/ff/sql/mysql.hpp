@@ -55,7 +55,7 @@ namespace ff
     }                                                         \
   };
     impl_mysql_bind_setter(bool, setBoolean);       // bool
-    impl_mysql_bind_setter(std::string, setString); // string
+    impl_mysql_bind_setter(std::string, setString); // text
     // impl_mysql_bind_setter(std::string, setDateTime);//time
     // impl_mysql_bind_setter();
     impl_mysql_bind_setter(int8_t, setInt); // tinyint
@@ -96,8 +96,8 @@ namespace ff
     BINARY,
     VARCHAR,
     VARBINARY,
-    LONGVARCHAR,
-    LONGVARBINARY,
+    *LONGVARCHAR,
+    *LONGVARBINARY,
     TIMESTAMP,
     DATE,
     TIME,

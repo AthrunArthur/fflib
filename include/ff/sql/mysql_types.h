@@ -25,3 +25,56 @@
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
 #include "ff/sql/mysql_types_char_varchar_text.h"
+#include "ff/sql/mysql_types_bin_varbin_blob.h"
+#include <iostream>
+
+
+// template<class T> class max{
+//   public : 
+//     T a;
+//     // void abc(){std::cout << "this is spada";}
+// };
+// 
+// template<> class max<int>{
+//   int a;    
+// };
+
+
+
+// template<class T> T ma(T a){
+//   return a;
+// }
+// 
+// template<> int ma(int a){
+//   return 0;
+// }
+
+
+
+// template<class T> void zi(T t){
+//   cout << "this is zi";
+// }
+// 
+// template<> void zi<int>(int t){
+//   cout << "this is t";
+// }
+// 
+
+
+// template<class B, class C> struct bd{
+//   B a;
+//   B abc(){return a;}
+// };
+
+// template<class A> struct bd<A, int>{
+//   float a;
+//   A abc(int c){cout << "this is piantehua" << endl;}
+// };
+
+
+// template<class T, class B> void k(){}
+// template<class A> void k(){
+//   A abc;
+//   cout << abc;}
+
+// template<>
