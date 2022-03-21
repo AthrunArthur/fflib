@@ -143,18 +143,18 @@ template <uint16_t Len> struct mysql_rs_getter<::ff::mysql::varbin_m<Len>> {
 
 
 
-// for Blob
+// for Blob(using string method)
 namespace ff {
 namespace mysql {
 struct blob_m {
 public:
   inline blob_m() : m_data(){};
   inline blob_m(const char *s) : m_data(s){};
-  inline blob_m(const std::istream *s) : ms_data(&*s){};
+  // inline blob_m(const std::istream *s) : ms_data(&s);
   inline blob_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
   inline blob_m(const blob_m &s) : m_data(s.data()) {}
   inline blob_m(blob_m &&s) : m_data(std::move(s.m_data)) {}
-  blob_m  &operator=(const blob_m &s) {
+  blob_m &operator=(const blob_m &s) {
     if (&s == this) {
       return *this;
     }
@@ -167,7 +167,7 @@ public:
 
 protected:
   std::string m_data;
-  std::istream ms_data;
+  // std::istream ms_data;
 };
 
 // namespace internal {
@@ -184,7 +184,8 @@ template <class STMT>
 struct mysql_bind_setter<STMT, ::ff::mysql::blob_m > {
   static void bind(STMT stmt, int index,
                    const ::ff::mysql::blob_m  &value) {
-    stmt->setBlob(index, value.data());
+    // stmt->setBlob(index, value.data());
+    stmt->setString(index, value.data());
   }
 };
 
@@ -192,7 +193,8 @@ template <class T> struct mysql_rs_getter;
 template <> struct mysql_rs_getter<::ff::mysql::blob_m>{
   template <typename RST>
   static ::ff::mysql::blob_m get(RST r, const std::string &name) {
-    return ::ff::mysql::blob_m (r->getBlob(name));
+    // return ::ff::mysql::blob_m (r->getBlob(name));
+    return ::ff::mysql::blob_m (r->getString(name));
   }
 };
 
