@@ -26,6 +26,7 @@
 #include <cppconn/sqlstring.h>
 #include "ff/sql/mysql_types_char_varchar_text.h"
 #include "ff/sql/mysql_types_bin_varbin_blob.h"
+#include "mysql_types_times.h"
 #include <iostream>
 
 
