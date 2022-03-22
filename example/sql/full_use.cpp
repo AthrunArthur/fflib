@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 
   mytable::row_collection_type::row_type t1;
   t1.set<c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12>(
-      1, "hi", 123435, 1, 1, 1, 3.2, 2.0, 16, 16.0, 8, 8.0);
+      1, "1992-08-07 13:05:01", 123435, 1, 1, 1, 3.2, 2.0, 16, 16.0, 8, 8.0);
   rows.push_back(std::move(t1));
 
   mytable::insert_or_replace_rows(&engine, rows);
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
       mytable::select<c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12>(
           &engine)
           .eval();
-  std::cout << "size: " << ret1.size() << std::endl;
+  std::cout << "size: " << ret1.size() << std::endl;  
   for (size_t i = 0; i < ret1.size(); ++i) {
     std::cout << ret1[i].get<c1>() << ", " << ret1[i].get<c2>() << ", "
               << ret1[i].get<c3>() << ", " << ret1[i].get<c4>() << ", "

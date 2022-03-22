@@ -24,7 +24,8 @@
 #pragma once
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
-
+#include <iostream>
+#include <fstream>
 
 
 // for Binary
@@ -150,9 +151,9 @@ struct blob_m {
 public:
   inline blob_m() : m_data(){};
   inline blob_m(const char *s) : m_data(s){};
-  // inline blob_m(const std::istream *s) : ms_data(&s);
+  // inline blob_m(const std::istream *s) : ms_data(&(std::filebuf(*s)));//istream构造函数需要以basic_istream的子类filebuf类型输入指针地址
   inline blob_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  inline blob_m(const blob_m &s) : m_data(s.data()) {}
+  inline blob_m(const blob_m &s) : m_data(s.data()) {} 
   inline blob_m(blob_m &&s) : m_data(std::move(s.m_data)) {}
   blob_m &operator=(const blob_m &s) {
     if (&s == this) {

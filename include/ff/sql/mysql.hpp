@@ -55,9 +55,8 @@ namespace ff
     }                                                         \
   };
     impl_mysql_bind_setter(bool, setBoolean);       // bool
-    impl_mysql_bind_setter(std::string, setString); // text
-    // impl_mysql_bind_setter(std::string, setDateTime);//time
-    // impl_mysql_bind_setter();
+    // impl_mysql_bind_setter(std::string, setString); // define in mysql_types_char....h
+    impl_mysql_bind_setter(std::string, setDateTime);//time
     impl_mysql_bind_setter(int8_t, setInt); // tinyint
     impl_mysql_bind_setter(uint8_t, setUInt);
     impl_mysql_bind_setter(int16_t, setInt); // smallint
@@ -74,37 +73,43 @@ namespace ff
     // impl_mysql_bind_setter();
     /*     need to add:
         decimal, tiny/mediumInt
-
-        char, varchar, binary, varbinary, set, enum, tinytext, text, mediumtext, longtext
-
+        set, enum, tinytext, mediumtext, longtext
         date, time, datetime, timestamp, year
-
         geometry and json
 
+
+
+        char, varchar, binary, varbinary,  text,
         */
 
-/*  BIT,
+/*  
     TINYINT,
     SMALLINT,
-    MEDIUMINT,
     REAL,\\=float
     DOUBLE
-
-    DECIMAL,
-    NUMERIC,
     CHAR,
     BINARY,
     VARCHAR,
     VARBINARY,
-    *LONGVARCHAR,
-    *LONGVARBINARY,
+
+    //need to add:
     TIMESTAMP,
     DATE,
     TIME,
     YEAR,
-    GEOMETRY,
+
+    BIT,
+    MEDIUMINT,
+
+    *LONGVARCHAR,
+    *LONGVARBINARY,
+    DECIMAL,
+    NUMERIC,
     ENUM,
     SET,
+    JSON 
+
+    GEOMETRY,
     SQLNULL,
     JSON */
 
@@ -125,9 +130,8 @@ namespace ff
     }                                               \
   };
 
-    // impl_mysql_rs_getter(std::string, getDateTime);//no getDateTime in prepared_statement.h
-    impl_mysql_rs_getter(bool, getBoolean);
-    impl_mysql_rs_getter(std::string, getString);
+    impl_mysql_rs_getter(std::string, getString);//
+    impl_mysql_rs_getter(bool, getBoolean); 
     impl_mysql_rs_getter(double, getDouble);
     impl_mysql_rs_getter(float, getFloat);
     impl_mysql_rs_getter(int64_t, getInt64);
