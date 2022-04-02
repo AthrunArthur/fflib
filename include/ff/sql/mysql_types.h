@@ -24,9 +24,11 @@
 #pragma once
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
-#include "ff/sql/mysql_types_char_varchar_text.h"
-#include "ff/sql/mysql_types_bin_varbin_blob.h"
-#include "mysql_types_times.h"
+#include "ff/sql/mysql_types_string.h"
+#include "ff/sql/mysql_types_string_bin.h"
+#include "ff/sql/mysql_types_spatialData.h"
+#include "ff/sql/mysql_types_numericData.h"
+#include "ff/sql/mysql_types_times.h"
 #include <iostream>
 
 

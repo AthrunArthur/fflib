@@ -26,6 +26,7 @@
 #include <cppconn/sqlstring.h>
 #include <iostream>
 #include <fstream>
+#include <assert.h>
 
 #define bitMax 64
 
