@@ -27,7 +27,9 @@
 #include <cppconn/sqlstring.h>
 /** 
 types method of date, time, datetime, timestamp, year are defined in setDatetime and getString, 
-the type defination as one data structure MYSQL_TIME on : usr/include/mysql/mysql_time.h 
+the type defination as one data structure MYSQL_TIME on : usr/include/mysql/mysql_time.h
+It seem that the difference of all time type will be separated in the setDatetime and getString. 
+The important is how to use these type like time, date in the fflib.
 */
 
 // for time
