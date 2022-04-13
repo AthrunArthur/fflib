@@ -27,19 +27,23 @@
 #include "ff/sql/mysql_types_string.h"
 #include "ff/sql/mysql_types_string_bin.h"
 #include "ff/sql/mysql_types_spatialData.h"
-#include "ff/sql/mysql_types_numericData.h"
+#ifdef FF_SUPPORT_SQL_DECIMAL
+#include "ff/sql/mysql_types_decimal.h"
+#endif
+#include "ff/sql/mysql_types_blob.h"
+#include "ff/sql/mysql_types_enum_set.h"
+#include "ff/sql/mysql_types_medium_int.h"
 #include "ff/sql/mysql_types_times.h"
 #include <iostream>
 
-
 // template<class T> class max{
-//   public : 
+//   public :
 //     T a;
 //     // void abc(){std::cout << "this is spada";}
 // };
-// 
+//
 // template<> class max<int>{
-//   int a;    
+//   int a;
 // };
 
 
@@ -47,7 +51,7 @@
 // template<class T> T ma(T a){
 //   return a;
 // }
-// 
+//
 // template<> int ma(int a){
 //   return 0;
 // }
@@ -57,11 +61,11 @@
 // template<class T> void zi(T t){
 //   cout << "this is zi";
 // }
-// 
+//
 // template<> void zi<int>(int t){
 //   cout << "this is t";
 // }
-// 
+//
 
 
 // template<class B, class C> struct bd{

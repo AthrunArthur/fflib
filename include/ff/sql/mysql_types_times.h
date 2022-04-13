@@ -1,7 +1,6 @@
 /***********************************************
   The MIT License (MIT)
 
-
   Copyright (c) 2022 zi wang <zzziwang@outlook.com>
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,10 +24,10 @@
 #pragma once
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
-/** 
-types method of date, time, datetime, timestamp, year are defined in setDatetime and getString, 
+/**
+types method of date, time, datetime, timestamp, year are defined in setDatetime and getString,
 the type defination as one data structure MYSQL_TIME on : usr/include/mysql/mysql_time.h
-It seem that the difference of all time type will be separated in the setDatetime and getString. 
+It seem that the difference of all time type will be separated in the setDatetime and getString.
 The important is how to use these type like time, date in the fflib.
 */
 

@@ -3,6 +3,7 @@ project(fflib)
 
 add_definitions(-std=c++11)
 add_definitions(-O2)
+add_definitions(-DFF_SUPPORT_SQL_DECIMAL)
 #add_definitions(-g)
 #add_definitions(-DPROTO_BUF_SUPPORT)
 
