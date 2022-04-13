@@ -15,7 +15,7 @@ struct md {
 
 using namespace ff::mysql;
 define_column(c1, column, uint64_t, "id");
-define_column(xx, column, varbin_m<5>, "id");
+define_column(xx, column, varchar_m<5>, "id");
 define_column(yy, column, time_m, "id");
 typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, xx, yy>
     mytable;  

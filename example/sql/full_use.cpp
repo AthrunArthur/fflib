@@ -35,7 +35,7 @@ struct md {
 };
 
 define_column(c1, column, uint64_t, "id");
-define_column(c2, key, std::string, "event");
+define_column(c2, column, std::string, "event");
 define_column(c3, index, uint64_t, "ts");
 define_column(c4, index, int64_t, "a");
 define_column(c5, column, uint32_t, "b");
