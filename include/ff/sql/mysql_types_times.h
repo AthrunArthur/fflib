@@ -56,6 +56,12 @@ public:
 protected:
   std::string m_data;
 };
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<time_m> {
+  static void dump(std::stringstream &ss) { ss << "TIME"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
@@ -104,7 +110,12 @@ public:
 protected:
   std::string m_data;
 };
-
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<date_m> {
+  static void dump(std::stringstream &ss) { ss << "DATE"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
@@ -152,7 +163,12 @@ public:
 protected:
   std::string m_data;
 };
-
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<datetime_m> {
+  static void dump(std::stringstream &ss) { ss << "DATETIME"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
@@ -200,7 +216,12 @@ public:
 protected:
   std::string m_data;
 };
-
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<timestamp_m> {
+  static void dump(std::stringstream &ss) { ss << "TIMESTAMP"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;

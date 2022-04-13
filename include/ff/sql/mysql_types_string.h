@@ -49,6 +49,12 @@ public:
 protected:
   std::string m_data;
 };
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<enum_m> {
+  static void dump(std::stringstream &ss) { ss << "ENUM"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
@@ -99,6 +105,12 @@ public:
 protected:
   std::string m_data;
 };
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<set_m> {
+  static void dump(std::stringstream &ss) { ss << "SET"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
@@ -243,52 +255,58 @@ template <uint16_t Len> struct mysql_rs_getter<::ff::mysql::varchar_m<Len>> {
 
 
 
-//for text_m
-namespace ff {
-namespace mysql {
-struct text_m {
-public:
-  inline text_m() : m_data(){};
-  inline text_m(const char *s) : m_data(s){};
-  inline text_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  inline text_m(const text_m &s) : m_data(s.data()) {}
-  text_m(text_m &&s) : m_data(std::move(s.m_data)) {}
-  text_m  &operator=(const text_m &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
+// //for text_m
+// namespace ff {
+// namespace mysql {
+// struct text_m {
+// public:
+//   inline text_m() : m_data(){};
+//   inline text_m(const char *s) : m_data(s){};
+//   inline text_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
+//   inline text_m(const text_m &s) : m_data(s.data()) {}
+//   text_m(text_m &&s) : m_data(std::move(s.m_data)) {}
+//   text_m  &operator=(const text_m &s) {
+//     if (&s == this) {
+//       return *this;
+//     }
+//     m_data = s.m_data;
+//     return *this;
+//   };
 
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
+//   const std::string &data() const { return m_data; }
+//   std::string &data() { return m_data; }
 
-protected:
-  std::string m_data;
-};
-} // namespace mysql
-namespace sql {
-template <class STMT, class T> struct mysql_bind_setter;
+// protected:
+//   std::string m_data;
+// };
+// namespace internal {
+// template <class T> struct dump_col_type_creation;
+// template <> struct dump_col_type_creation<text_m> {
+//   static void dump(std::stringstream &ss) { ss << "TEXT"; }
+// };
+// } // namespace internal
+// } // namespace mysql
+// namespace sql {
+// template <class STMT, class T> struct mysql_bind_setter;
 
-template <class STMT>
-struct mysql_bind_setter<STMT, ::ff::mysql::text_m > {
-  static void bind(STMT stmt, int index,
-                   const ::ff::mysql::text_m  &value) {
-    stmt->setString(index, value.data());
-  }
-};
+// template <class STMT>
+// struct mysql_bind_setter<STMT, ::ff::mysql::text_m > {
+//   static void bind(STMT stmt, int index,
+//                    const ::ff::mysql::text_m  &value) {
+//     stmt->setString(index, value.data());
+//   }
+// };
 
-template <class T> struct mysql_rs_getter;
-template <> struct mysql_rs_getter<::ff::mysql::text_m>{
-  template <typename RST>
-  static ::ff::mysql::text_m get(RST r, const std::string &name) {
-    return ::ff::mysql::text_m (r->getString(name));
-  }
-};
+// template <class T> struct mysql_rs_getter;
+// template <> struct mysql_rs_getter<::ff::mysql::text_m>{
+//   template <typename RST>
+//   static ::ff::mysql::text_m get(RST r, const std::string &name) {
+//     return ::ff::mysql::text_m (r->getString(name));
+//   }
+// };
 
-} // namespace sql
-} // namespace ff
+// } // namespace sql
+// } // namespace ff
 
 
 

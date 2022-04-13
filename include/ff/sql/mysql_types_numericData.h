@@ -128,23 +128,23 @@ namespace internal {
 
 // assert Len match the length of mediumInt
 template <typename T> struct checkLength;
-template <uint64_t Len> struct checkLength<medInt_m<Len>> {
+template <uint32_t Len> struct checkLength<medInt_m<Len>> {
   static void checklength(){
   assert(Len < medIntMax);
   } 
 };
 
 template <typename T> struct dump_col_type_creation;
-template <uint64_t Len> struct dump_col_type_creation<medInt_m<Len>> {
+template <uint32_t Len> struct dump_col_type_creation<medInt_m<Len>> {
   static void dump(std::stringstream &ss) { 
-    ss << " MediumInt(" << Len << ") "; }
+    ss << " MediumInt "; }
 };
 } // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
 
-template <class STMT, uint64_t Len>
+template <class STMT, uint32_t Len>
 struct mysql_bind_setter<STMT, ::ff::mysql::medInt_m<Len>> {
   static void bind(STMT stmt, int index,
                    const ::ff::mysql::medInt_m<Len> &value) {
@@ -153,7 +153,7 @@ struct mysql_bind_setter<STMT, ::ff::mysql::medInt_m<Len>> {
 };
 
 template <class T> struct mysql_rs_getter;
-template <uint64_t Len> struct mysql_rs_getter<::ff::mysql::medInt_m<Len>> {
+template <uint32_t Len> struct mysql_rs_getter<::ff::mysql::medInt_m<Len>> {
   template <typename RST>
   static ::ff::mysql::medInt_m<Len> get(RST r, const std::string &name) {
     return ::ff::mysql::medInt_m<Len>(r->getInt64(name));

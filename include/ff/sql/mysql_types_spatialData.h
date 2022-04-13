@@ -60,12 +60,12 @@ protected:
   std::string m_data;
 };
 
-// namespace internal {
-// template <class T> struct dump_col_type_creation;
-// template <uint16_t Len> struct dump_col_type_creation<json_m> {
-//   static void dump(std::stringstream &ss) { ss << "JSON(" << Len << ") "; }
-// };
-// } // namespace internal
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<json_m> {
+  static void dump(std::stringstream &ss) { ss << "JSON"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;

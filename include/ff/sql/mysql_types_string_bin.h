@@ -58,12 +58,12 @@ protected:
   // std::istream ms_data;
 };
 
-// namespace internal {
-// template <class T> struct dump_col_type_creation;
-// template <uint16_t Len> struct dump_col_type_creation<blob_m> {
-//   static void dump(std::stringstream &ss) { ss << "TEXT(" << Len << ") "; }
-// };
-// } // namespace internal
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <> struct dump_col_type_creation<blob_m> {
+  static void dump(std::stringstream &ss) { ss << "BLOB"; }
+};
+} // namespace internal
 } // namespace mysql
 namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
