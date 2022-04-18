@@ -34,35 +34,22 @@ The important is how to use these type like time, date in the fflib.
 // for time
 namespace ff {
 namespace mysql {
-struct time_m {
+struct time_m : public std::string {
 public:
-  inline time_m() : m_data(){};
-  inline time_m(const char *s) : m_data(s){};
-  inline time_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  inline time_m(const time_m &s) : m_data(s.data()) {}
-  time_m(time_m &&s) : m_data(std::move(s.m_data)) {}
-  time_m  &operator=(const time_m &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
-
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
-
-protected:
-  std::string m_data;
+  time_m() : std::string(){};
+  time_m(const char *s) : std::string(s){};
+  time_m(const ::sql::SQLString &s) : std::string(s.c_str()){};
+  time_m(const time_m &s) : std::string(s.c_str()){};
 };
+
+} // namespace mysql
+namespace sql {
 namespace internal {
 template <class T> struct dump_col_type_creation;
-template <> struct dump_col_type_creation<time_m> {
+template <> struct dump_col_type_creation<::ff::mysql::time_m> {
   static void dump(std::stringstream &ss) { ss << "TIME"; }
 };
 } // namespace internal
-} // namespace mysql
-namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
 
 template <class STMT>
@@ -88,35 +75,23 @@ template <> struct mysql_rs_getter<::ff::mysql::time_m>{
 // for date
 namespace ff {
 namespace mysql {
-struct date_m {
+struct date_m : public std::string {
 public:
-  inline date_m() : m_data(){};
-  inline date_m(const char *s) : m_data(s){};
-  inline date_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  inline date_m(const date_m &s) : m_data(s.data()) {}
-  date_m(date_m &&s) : m_data(std::move(s.m_data)) {}
-  date_m  &operator=(const date_m &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
-
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
-
-protected:
-  std::string m_data;
+  date_m() : std::string(){};
+  date_m(const char *s) : std::string(s){};
+  date_m(const ::sql::SQLString &s) : std::string(s.c_str()){};
+  date_m(const time_m &s) : std::string(s.c_str()){};
 };
+
+} // namespace mysql
+namespace sql {
 namespace internal {
 template <class T> struct dump_col_type_creation;
-template <> struct dump_col_type_creation<date_m> {
+template <> struct dump_col_type_creation<::ff::mysql::date_m> {
   static void dump(std::stringstream &ss) { ss << "DATE"; }
 };
 } // namespace internal
-} // namespace mysql
-namespace sql {
+
 template <class STMT, class T> struct mysql_bind_setter;
 
 template <class STMT>
@@ -138,38 +113,29 @@ template <> struct mysql_rs_getter<::ff::mysql::date_m>{
 } // namespace sql
 } // namespace ff
 
+
+
+
 // for datetime
 namespace ff {
 namespace mysql {
-struct datetime_m {
+struct datetime_m : public std::string{
 public:
-  inline datetime_m() : m_data(){};
-  inline datetime_m(const char *s) : m_data(s){};
-  inline datetime_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  inline datetime_m(const datetime_m &s) : m_data(s.data()) {}
-  datetime_m(datetime_m &&s) : m_data(std::move(s.m_data)) {}
-  datetime_m  &operator=(const datetime_m &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
-
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
-
-protected:
-  std::string m_data;
+  datetime_m() : std::string(){}
+  datetime_m(char *s) : std::string(s){};
+  datetime_m(const ::sql::SQLString &s) : std::string(s.c_str()){}
+  datetime_m(const datetime_m &s) : std::string(s.c_str()){}
 };
+
+
+namespace sql {
 namespace internal {
 template <class T> struct dump_col_type_creation;
-template <> struct dump_col_type_creation<datetime_m> {
+template <> struct dump_col_type_creation<::ff::mysql::datetime_m> {
   static void dump(std::stringstream &ss) { ss << "DATETIME"; }
 };
 } // namespace internal
 } // namespace mysql
-namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
 
 template <class STMT>
@@ -191,38 +157,47 @@ template <> struct mysql_rs_getter<::ff::mysql::datetime_m>{
 } // namespace sql
 } // namespace ff
 
+
+
+
 // for timestamp
 namespace ff {
 namespace mysql {
-struct timestamp_m {
+struct timestamp_m : std::string{
 public:
-  inline timestamp_m() : m_data(){};
-  inline timestamp_m(const char *s) : m_data(s){};
-  inline timestamp_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  inline timestamp_m(const timestamp_m &s) : m_data(s.data()) {}
-  timestamp_m(timestamp_m &&s) : m_data(std::move(s.m_data)) {}
-  timestamp_m  &operator=(const timestamp_m &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
-
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
-
-protected:
-  std::string m_data;
+  timestamp_m() : std::string(){};
+  timestamp_m(const char *s) : std::string(s){};
+  timestamp_m(const ::sql::SQLString &s) : std::string(s.c_str()){};
+  timestamp_m(const timestamp_m &s) : std::string(s.c_str()){};
 };
+//   inline timestamp_m() : m_data(){};
+//   inline timestamp_m(const char *s) : m_data(s){};
+//   inline timestamp_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
+//   inline timestamp_m(const timestamp_m &s) : m_data(s.data()) {}
+//   timestamp_m(timestamp_m &&s) : m_data(std::move(s.m_data)) {}
+//   timestamp_m  &operator=(const timestamp_m &s) {
+//     if (&s == this) {
+//       return *this;
+//     }
+//     m_data = s.m_data;
+//     return *this;
+//   };
+
+//   const std::string &data() const { return m_data; }
+//   std::string &data() { return m_data; }
+
+// protected:
+//   std::string m_data;
+// };
+
+} // namespace mysql
+namespace sql {
 namespace internal {
 template <class T> struct dump_col_type_creation;
-template <> struct dump_col_type_creation<timestamp_m> {
+template <> struct dump_col_type_creation<::ff::mysql::timestamp_m> {
   static void dump(std::stringstream &ss) { ss << "TIMESTAMP"; }
 };
 } // namespace internal
-} // namespace mysql
-namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
 
 template <class STMT>
