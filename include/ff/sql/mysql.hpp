@@ -24,7 +24,6 @@
 #pragma once
 
 #include "ff/sql/engine.h"
-#include "ff/sql/mysql_types.h"
 #include "ff/sql/rows.h"
 #include "ff/sql/table.h"
 #include <cppconn/driver.h>
@@ -34,6 +33,7 @@
 #include <cppconn/statement.h>
 #include <sstream>
 #include <thread>
+#include "ff/sql/mysql_types.h"
 
 namespace ff
 {
@@ -66,7 +66,7 @@ namespace ff
     impl_mysql_bind_setter(int64_t, setInt64); // bigint
     impl_mysql_bind_setter(uint64_t, setUInt64);
     impl_mysql_bind_setter(double, setDouble);       // double
-    impl_mysql_bind_setter(float, setFloat);        // float
+    impl_mysql_bind_setter(float, setDouble);        // float
     // impl_mysql_bind_setter(std::istream *, setBlob); // Blob
 
 
@@ -82,7 +82,7 @@ namespace ff
         char, varchar, binary, varbinary,  text,
         */
 
-/*  
+/*
     TINYINT,
     SMALLINT,
     REAL,\\=float
@@ -107,7 +107,7 @@ namespace ff
     NUMERIC,
     ENUM,
     SET,
-    JSON 
+    JSON
 
     GEOMETRY,
     SQLNULL,
@@ -131,9 +131,9 @@ namespace ff
   };
 
     impl_mysql_rs_getter(std::string, getString);//
-    impl_mysql_rs_getter(bool, getBoolean); 
+    impl_mysql_rs_getter(bool, getBoolean);
     impl_mysql_rs_getter(double, getDouble);
-    impl_mysql_rs_getter(float, getFloat);
+    impl_mysql_rs_getter(float, getDouble);
     impl_mysql_rs_getter(int64_t, getInt64);
     impl_mysql_rs_getter(uint64_t, getUInt64);
     impl_mysql_rs_getter(int32_t, getInt);
@@ -142,7 +142,6 @@ namespace ff
     impl_mysql_rs_getter(uint16_t, getUInt);
     impl_mysql_rs_getter(int8_t, getInt);
     impl_mysql_rs_getter(uint8_t, getUInt);
-    // impl_mysql_rs_getter(std::istream *, getBlob);
 
 #undef impl_mysql_rs_getter
 

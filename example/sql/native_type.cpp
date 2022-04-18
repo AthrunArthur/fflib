@@ -15,10 +15,10 @@ struct md {
 
 using namespace ff::mysql;
 define_column(c1, column, uint64_t, "id");
-define_column(xx, column, varchar_m<5>, "id");
+define_column(xx, column, ff::mysql::var_binary<5>, "id");
 define_column(yy, column, time_m, "id");
 typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, xx, yy>
-    mytable;  
+    mytable;
 
 int main(int argc, char *argv[]) {
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
   auto ret1 = mytable::select<c1, xx, yy>(&engine).eval();
   std::cout << "size: " << ret1.size() << std::endl;
   for (size_t i = 0; i < ret1.size(); ++i) {
-    std::cout << ret1[i].get<c1>() << ", " << ret1[i].get<xx>().data() << ", " 
+    std::cout << ret1[i].get<c1>() << ", " << ret1[i].get<xx>().data() << ", "
               << ret1[i].get<yy>().data()
               << std::endl;
   }
