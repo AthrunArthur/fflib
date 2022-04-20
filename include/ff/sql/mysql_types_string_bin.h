@@ -34,69 +34,75 @@
 // for BIT
 namespace ff {
 namespace mysql {
-template <uint8_t Len> struct bit_m{
-  static_assert(Len >= 1 && Len <= 64, "invalid Len for mysql.bit");
+template <uint8_t Len> struct bit : public std::string{
+  static_assert(Len >= 1 && Len <= bitMax, "Invalid length for mysql.bit");
+  // assert(Len >= 1 && Len <= bitMax);// 运行时处理，形参未实例化无法判断，只能放入到模板中（如下），当调用模板时进行判断
+// // assert Len match the length of mediumInt
+//  template <typename T> struct checkLength;
+//  template <uint8_t Len> struct checkLength<bit<Len>> {
+//    static void checklength(){
+//    assert(Len <= bitMax);
+//    }
+//  };
 
 public:
-  bit_m() : m_data(){};
-  bit_m(const char *s) : m_data(s){};
-  bit_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  bit_m(const bit_m<Len> &s) : m_data(s.data()) {}
-  bit_m(bit_m<Len> &&s) : m_data(std::move(s.m_data)) {}
-  bit_m<Len> &operator=(const bit_m<Len> &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
+  bit() : std::string(){}
+  bit(const char *s) : std::string(s){}
+  bit(const ::sql::SQLString &s) : std::string(s.asStdString()){}
+  bit(const bit<Len> &s) : std::string(s){}
 
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
+//   bit() : m_data(){};
+//   bit(const char *s) : m_data(s){};
+//   bit(const ::sql::SQLString &s) : m_data(s.c_str()) {}
+//   bit(const bit<Len> &s) : m_data(s.data()) {}
+//   bit(bit<Len> &&s) : m_data(std::move(s.m_data)) {}
+//   bit<Len> &operator=(const bit<Len> &s) {
+//     if (&s == this) {
+//       return *this;
+//     }
+//     m_data = s.m_data;
+//     return *this;
+//   };
 
-protected:
-  std::string m_data;
+//   const std::string &data() const { return m_data; }
+//   std::string &data() { return m_data; }
+
+// protected:
+//   std::string m_data;
 };
-
+} // namespace mysql
+namespace sql {
 namespace internal {
-
-
-// assert Len match the length of mediumInt
-template <typename T> struct checkLength;
-template <uint8_t Len> struct checkLength<bit_m<Len>> {
-  static void checklength(){
-  assert(Len <= bitMax);
-  }
-};
-
 template <typename T> struct dump_col_type_creation;
-template <uint8_t Len> struct dump_col_type_creation<bit_m<Len>> {
+template <uint8_t Len> struct dump_col_type_creation<::ff::mysql::bit<Len>> {
   static void dump(std::stringstream &ss) {
     ss << " bitLength(" << Len << ") "; }
 };
 } // namespace internal
-} // namespace mysql
-namespace sql {
+
 template <class STMT, class T> struct mysql_bind_setter;
 
 template <class STMT, uint8_t Len>
-struct mysql_bind_setter<STMT, ::ff::mysql::bit_m<Len>> {
+struct mysql_bind_setter<STMT, ::ff::mysql::bit<Len>> {
   static void bind(STMT stmt, int index,
-                   const ::ff::mysql::bit_m<Len> &value) {
-    stmt->setString(index, value.data());
+                   const ::ff::mysql::bit<Len> &value) {
+    stmt->setString(index, value);
   }
 };
 
 template <class T> struct mysql_rs_getter;
-template <uint8_t Len> struct mysql_rs_getter<::ff::mysql::bit_m<Len>> {
+template <uint8_t Len> struct mysql_rs_getter<::ff::mysql::bit<Len>> {
   template <typename RST>
-  static ::ff::mysql::bit_m<Len> get(RST r, const std::string &name) {
-    return ::ff::mysql::bit_m<Len>(r->getString(name));
+  static ::ff::mysql::bit<Len> get(RST r, const std::string &name) {
+    return ::ff::mysql::bit<Len>(r->getString(name));
   }
 };
 
 } // namespace sql
 } // namespace ff
+
+
+
 
 // for binary
 namespace ff {
@@ -137,6 +143,9 @@ template <uint32_t Len> struct mysql_rs_getter<::ff::mysql::binary<Len>> {
 
 } // namespace sql
 } // namespace ff
+
+
+
 
 // for varbin
 namespace ff {
