@@ -24,9 +24,6 @@
 #pragma once
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
-#include <iostream>
-#include <fstream>
-
 
 /* Geometry is an abstract class. However, in the prepared statement, we did not find its set method (in file:mysql_prepared_statement). 
 At the same time, there are no judgement of responding class in getResult (mysql_ps_resultset.cpp). 
@@ -38,108 +35,39 @@ Thus, we only define this type as usual string type here. Then, it may should be
 //for json_m
 namespace ff {
 namespace mysql {
-struct json_m {
+struct json : public std::string {
 public:
-  inline json_m() : m_data(){};
-  inline json_m(const char *s) : m_data(s){};
-  inline json_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-  inline json_m(const json_m &s) : m_data(s.data()) {}
-  json_m(json_m &&s) : m_data(std::move(s.m_data)) {}
-  json_m  &operator=(const json_m &s) {
-    if (&s == this) {
-      return *this;
-    }
-    m_data = s.m_data;
-    return *this;
-  };
-
-  const std::string &data() const { return m_data; }
-  std::string &data() { return m_data; }
-
-protected:
-  std::string m_data;
+  json() : std::string(){};
+  json(const char *s) : std::string(s){};
+  json(const ::sql::SQLString &s) : std::string(s.c_str()){};
+  json(const json &s) : std::string(s.c_str()){};
 };
 
+} // namespace mysql
+namespace sql {
 namespace internal {
 template <class T> struct dump_col_type_creation;
-template <> struct dump_col_type_creation<json_m> {
+template <> struct dump_col_type_creation<::ff::mysql::json> {
   static void dump(std::stringstream &ss) { ss << "JSON"; }
 };
 } // namespace internal
-} // namespace mysql
-namespace sql {
 template <class STMT, class T> struct mysql_bind_setter;
 
 template <class STMT>
-struct mysql_bind_setter<STMT, ::ff::mysql::json_m > {
+struct mysql_bind_setter<STMT, ::ff::mysql::json > {
   static void bind(STMT stmt, int index,
-                   const ::ff::mysql::json_m  &value) {
-    stmt->setString(index, value.data());
+                   const ::ff::mysql::json  &value) {
+    stmt->setString(index, value);
   }
 };
 
 template <class T> struct mysql_rs_getter;
-template <> struct mysql_rs_getter<::ff::mysql::json_m>{
+template <> struct mysql_rs_getter<::ff::mysql::json>{
   template <typename RST>
-  static ::ff::mysql::json_m get(RST r, const std::string &name) {
-    return ::ff::mysql::json_m (r->getString(name));
+  static ::ff::mysql::json get(RST r, const std::string &name) {
+    return ::ff::mysql::json (r->getString(name));
   }
 };
 
 } // namespace sql
 } // namespace ff
-
-
-
-// namespace ff {
-// namespace mysql {
-// template <uint8_t Len> struct bin_m{
-// public:
-//   bin_m() : m_data(){};
-//   bin_m(const char *s) : m_data(s){};
-//   bin_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-//   bin_m(const bin_m<Len> &s) : m_data(s.data()) {}
-//   bin_m(bin_m<Len> &&s) : m_data(std::move(s.m_data)) {}
-//   bin_m<Len> &operator=(const bin_m<Len> &s) {
-//     if (&s == this) {
-//       return *this;
-//     }
-//     m_data = s.m_data;
-//     return *this;
-//   };
-
-//   const std::string &data() const { return m_data; }
-//   std::string &data() { return m_data; }
-
-// protected:
-//   std::string m_data;
-// };
-
-// namespace internal {
-// template <class T> struct dump_col_type_creation;
-// template <uint8_t Len> struct dump_col_type_creation<bin_m<Len>> {
-//   static void dump(std::stringstream &ss) { ss << " CHAR(" << Len << ") "; }
-// };
-// } // namespace internal
-// } // namespace mysql
-// namespace sql {
-// template <class STMT, class T> struct mysql_bind_setter;
-
-// template <class STMT, uint8_t Len>
-// struct mysql_bind_setter<STMT, ::ff::mysql::bin_m<Len>> {
-//   static void bind(STMT stmt, int index,
-//                    const ::ff::mysql::bin_m<Len> &value) {
-//     stmt->setString(index, value.data());
-//   }
-// };
-
-// template <class T> struct mysql_rs_getter;
-// template <uint8_t Len> struct mysql_rs_getter<::ff::mysql::bin_m<Len>> {
-//   template <typename RST>
-//   static ::ff::mysql::bin_m<Len> get(RST r, const std::string &name) {
-//     return ::ff::mysql::bin_m<Len>(r->getString(name));
-//   }
-// };
-
-// } // namespace sql
-// } // namespace ff
