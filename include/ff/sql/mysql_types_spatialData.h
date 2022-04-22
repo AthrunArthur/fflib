@@ -32,40 +32,40 @@ Also, we did not find the responding class in mysql include file.
 Thus, we only define this type as usual string type here. Then, it may should be change base on relative classes.
 */
 
-//for json_m
+
 namespace ff {
 namespace mysql {
-struct json : public std::string {
+struct json_m : public std::string {
 public:
-  json() : std::string(){};
-  json(const char *s) : std::string(s){};
-  json(const ::sql::SQLString &s) : std::string(s.c_str()){};
-  json(const json &s) : std::string(s.c_str()){};
+  json_m() : std::string(){};
+  json_m(const char *s) : std::string(s){};
+  json_m(const ::sql::SQLString &s) : std::string(s.c_str()){};
+  json_m(const json_m &s) : std::string(s.c_str()){};
 };
 
 } // namespace mysql
 namespace sql {
 namespace internal {
 template <class T> struct dump_col_type_creation;
-template <> struct dump_col_type_creation<::ff::mysql::json> {
+template <> struct dump_col_type_creation<::ff::mysql::json_m> {
   static void dump(std::stringstream &ss) { ss << "JSON"; }
 };
 } // namespace internal
 template <class STMT, class T> struct mysql_bind_setter;
 
 template <class STMT>
-struct mysql_bind_setter<STMT, ::ff::mysql::json > {
+struct mysql_bind_setter<STMT, ::ff::mysql::json_m > {
   static void bind(STMT stmt, int index,
-                   const ::ff::mysql::json  &value) {
+                   const ::ff::mysql::json_m  &value) {
     stmt->setString(index, value);
   }
 };
 
 template <class T> struct mysql_rs_getter;
-template <> struct mysql_rs_getter<::ff::mysql::json>{
+template <> struct mysql_rs_getter<::ff::mysql::json_m>{
   template <typename RST>
-  static ::ff::mysql::json get(RST r, const std::string &name) {
-    return ::ff::mysql::json (r->getString(name));
+  static ::ff::mysql::json_m get(RST r, const std::string &name) {
+    return ::ff::mysql::json_m (r->getString(name));
   }
 };
 

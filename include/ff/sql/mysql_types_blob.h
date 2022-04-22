@@ -40,12 +40,11 @@ struct long_blob_flag {};
 
 template <typename FT> struct blob_m {
 public:
-  blob_m() : ms_data(nullptr) {}
-  blob_m(std::istream *s) : ms_data(s){};
+  inline blob_m() : ms_data(nullptr) {}
+  inline blob_m(std::istream *s) : ms_data(s){};
 
-  std::istream *stream() const { return ms_data; }
-
-  std::istream *&stream() { return ms_data; }
+  inline std::istream *stream() const { return ms_data; }
+  inline std::istream *&stream() { return ms_data; }
 
 protected:
   std::istream *ms_data;

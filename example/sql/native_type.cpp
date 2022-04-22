@@ -16,7 +16,9 @@ struct md {
 using namespace ff::mysql;
 define_column(c1, column, uint64_t, "id");
 define_column(xx, column, ff::mysql::bit<63>, "id");
-define_column(yy, column, time_m, "id");
+define_column(yy, column, json_m, "MULTIPOINT(0 0, 20 20, 60 60)");
+
+
 typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, xx, yy>
     mytable;
 
@@ -43,7 +45,8 @@ int main(int argc, char *argv[]) {
   std::cout << "size: " << ret1.size() << std::endl;
   for (size_t i = 0; i < ret1.size(); ++i) {
     std::cout << ret1[i].get<c1>() << ", " << ret1[i].get<xx>().data() << ", "
-              << ret1[i].get<yy>().data()
+              << ret1[i].get<yy>().data() << ", "
+              // << ret1[i].get<zz>().data() 
               << std::endl;
   }
   std::cout << "---------------" << std::endl;

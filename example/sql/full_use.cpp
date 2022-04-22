@@ -53,6 +53,7 @@ define_column(c12, column, int8_t, "i8");
 define_column(c13, column, md, "md");
 define_column(c14, column, mydecimal_t, "c14");
 define_column(c15, column, ff::mysql::medium_int, "c15");
+// define_column(c16, column, ff::mysql::blob, "blob");
 // define_column(c14, column, std::istream*, "istream");
 
 typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, c2, c3, c4,
