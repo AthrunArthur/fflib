@@ -28,7 +28,7 @@
 #include "ff/mysql/string_bin.h"
 #include "ff/mysql/spatialData.h"
 #ifdef FF_SUPPORT_SQL_DECIMAL
-#include "ff/sql/mysql_types_decimal.h"
+#include "ff/mysql/decimal.h"
 #endif
 #include "ff/mysql/blob.h"
 #include "ff/mysql/enum_set.h"

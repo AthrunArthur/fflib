@@ -35,14 +35,14 @@ namespace ff {
 namespace sql {
 namespace internal {
 template <typename T> struct dump_col_type_creation;
-template <uint8_t Len> struct dump_col_type_creation<std::bitset<Len>> {
+template <std::size_t Len> struct dump_col_type_creation<std::bitset<Len>> {
   static void dump(std::stringstream &ss) { ss << " BIT(" << Len << ") "; }
 };
 } // namespace internal
 
 template <class STMT, class T> struct mysql_bind_setter;
 
-template <class STMT, uint8_t Len>
+template <class STMT, std::size_t Len>
 struct mysql_bind_setter<STMT, std::bitset<Len>> {
   static void bind(STMT stmt, int index, const std::bitset<Len> &value) {
     stmt->setUInt64(index, value.to_ullong());
@@ -50,7 +50,7 @@ struct mysql_bind_setter<STMT, std::bitset<Len>> {
 };
 
 template <class T> struct mysql_rs_getter;
-template <uint8_t Len> struct mysql_rs_getter<std::bitset<Len>> {
+template <std::size_t Len> struct mysql_rs_getter<std::bitset<Len>> {
   template <typename RST>
   static std::bitset<Len> get(RST r, const std::string &name) {
     return std::bitset<Len>(r->getUInt64(name));
