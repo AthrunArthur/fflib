@@ -24,16 +24,16 @@
 #pragma once
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
-#include "ff/sql/mysql_types_string.h"
-#include "ff/sql/mysql_types_string_bin.h"
-#include "ff/sql/mysql_types_spatialData.h"
+#include "ff/mysql/string.h"
+#include "ff/mysql/string_bin.h"
+#include "ff/mysql/spatialData.h"
 #ifdef FF_SUPPORT_SQL_DECIMAL
 #include "ff/sql/mysql_types_decimal.h"
 #endif
-#include "ff/sql/mysql_types_blob.h"
-#include "ff/sql/mysql_types_enum_set.h"
-#include "ff/sql/mysql_types_medium_int.h"
-#include "ff/sql/mysql_types_times.h"
+#include "ff/mysql/blob.h"
+#include "ff/mysql/enum_set.h"
+#include "ff/mysql/medium_int.h"
+#include "ff/mysql/times.h"
 #include <iostream>
 
 // template<class T> class max{

@@ -33,7 +33,7 @@
 #include <cppconn/statement.h>
 #include <sstream>
 #include <thread>
-#include "ff/sql/mysql_types.h"
+#include "ff/mysql/mysql_types.h"
 
 namespace ff
 {

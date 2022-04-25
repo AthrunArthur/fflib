@@ -114,7 +114,7 @@ public:
   text_m(const ::sql::SQLString &s) : std::string(s.c_str()) {}
 };
 
-using tiny_text = text<tiny_text_flag>;
+using tiny_text = text_m<tiny_text_flag>;
 using text = std::string;
 using medium_text = text_m<medium_text_flag>;
 using long_text = text_m<long_text_flag>;
