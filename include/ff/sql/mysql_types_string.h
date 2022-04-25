@@ -30,10 +30,8 @@ namespace ff {
 namespace mysql {
 template <uint8_t Len> struct char_m : public std::string {
 public:
-  char_m() : std::string(){};
-  char_m(const char *s) : std::string(s){};
+  using std::string::string;
   char_m(const ::sql::SQLString &s) : std::string(s.c_str()) {}
-  char_m(const char_m<Len> &s) : std::string(s.c_str()) {}
 };
 
 } // namespace mysql
@@ -70,11 +68,8 @@ namespace ff {
 namespace mysql {
 template <uint16_t Len> struct varchar_m : public std::string {
 public:
-  varchar_m() : std::string(){};
-  varchar_m(const char *s) : std::string(s){};
-  varchar_m(const ::sql::SQLString &s)
-      : std::string(s.c_str()) {} // c_str: return char*
-  varchar_m(const varchar_m<Len> &s) : std::string(s.c_str()) {}
+  using std::string::string;
+  varchar_m(const ::sql::SQLString &s) : std::string(s.c_str()) {}
 };
 
 } // namespace mysql
@@ -106,3 +101,62 @@ template <uint16_t Len> struct mysql_rs_getter<::ff::mysql::varchar_m<Len>> {
 
 } // namespace sql
 } // namespace ff
+
+namespace ff {
+namespace mysql {
+struct tiny_text_flag {};
+struct medium_text_flag {};
+struct long_text_flag {};
+
+template <typename FT> struct text_m : public std::string {
+public:
+  using std::string::string;
+  text_m(const ::sql::SQLString &s) : std::string(s.c_str()) {}
+};
+
+using tiny_text = text<tiny_text_flag>;
+using text = std::string;
+using medium_text = text_m<medium_text_flag>;
+using long_text = text_m<long_text_flag>;
+
+} // namespace mysql
+namespace sql {
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <>
+struct dump_col_type_creation<
+    ::ff::mysql::text_m<::ff::mysql::tiny_text_flag>> {
+  static void dump(std::stringstream &ss) { ss << " TINYTEXT "; }
+};
+template <>
+struct dump_col_type_creation<
+    ::ff::mysql::text_m<::ff::mysql::medium_text_flag>> {
+  static void dump(std::stringstream &ss) { ss << " MEDIUMTEXT "; }
+};
+template <>
+struct dump_col_type_creation<
+    ::ff::mysql::text_m<::ff::mysql::long_text_flag>> {
+  static void dump(std::stringstream &ss) { ss << " LONGTEXT "; }
+};
+} // namespace internal
+template <class STMT, class T> struct mysql_bind_setter;
+
+template <class STMT, class FT>
+struct mysql_bind_setter<STMT, ::ff::mysql::text_m<FT>> {
+  static void bind(STMT stmt, int index, const ::ff::mysql::text_m<FT> &value) {
+    stmt->setString(index, value);
+  }
+};
+
+template <class T> struct mysql_rs_getter;
+template <class FT> struct mysql_rs_getter<::ff::mysql::text_m<FT>> {
+  template <typename RST>
+  static ::ff::mysql::text_m<FT> get(RST r, const std::string &name) {
+    auto is = r->getString(name);
+    return ::ff::mysql::text_m<FT>(is);
+  }
+};
+
+} // namespace sql
+} // namespace ff
+
