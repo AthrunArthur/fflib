@@ -22,66 +22,15 @@
   THE SOFTWARE.
  ************************************************/
 #pragma once
+#include "./spatialData.h"
+#include "./string.h"
+#include "./string_bin.h"
 #include "ff/sql/table_create.h"
 #include <cppconn/sqlstring.h>
-#include "ff/mysql/string.h"
-#include "ff/mysql/string_bin.h"
-#include "ff/mysql/spatialData.h"
 #ifdef FF_SUPPORT_SQL_DECIMAL
-#include "ff/mysql/decimal.h"
+#include "./decimal.h"
 #endif
-#include "ff/mysql/blob.h"
-#include "ff/mysql/enum_set.h"
-#include "ff/mysql/medium_int.h"
-#include "ff/mysql/times.h"
-#include <iostream>
-
-// template<class T> class max{
-//   public :
-//     T a;
-//     // void abc(){std::cout << "this is spada";}
-// };
-//
-// template<> class max<int>{
-//   int a;
-// };
-
-
-
-// template<class T> T ma(T a){
-//   return a;
-// }
-//
-// template<> int ma(int a){
-//   return 0;
-// }
-
-
-
-// template<class T> void zi(T t){
-//   cout << "this is zi";
-// }
-//
-// template<> void zi<int>(int t){
-//   cout << "this is t";
-// }
-//
-
-
-// template<class B, class C> struct bd{
-//   B a;
-//   B abc(){return a;}
-// };
-
-// template<class A> struct bd<A, int>{
-//   float a;
-//   A abc(int c){cout << "this is piantehua" << endl;}
-// };
-
-
-// template<class T, class B> void k(){}
-// template<class A> void k(){
-//   A abc;
-//   cout << abc;}
-
-// template<>
+#include "./blob.h"
+#include "./enum_set.h"
+#include "./medium_int.h"
+#include "./times.h"

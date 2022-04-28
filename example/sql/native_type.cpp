@@ -1,6 +1,5 @@
 
 #include "ff/sql/mysql.hpp"
-#include "ff/mysql/mysql_types.h"
 #include "ff/sql/table.h"
 
 struct mymeta {
@@ -46,7 +45,7 @@ int main(int argc, char *argv[]) {
   for (size_t i = 0; i < ret1.size(); ++i) {
     std::cout << ret1[i].get<c1>() << ", " << ret1[i].get<xx>() << ", "
               << ret1[i].get<yy>().data() << ", "
-              // << ret1[i].get<zz>().data() 
+              // << ret1[i].get<zz>().data()
               << std::endl;
   }
   std::cout << "---------------" << std::endl;
