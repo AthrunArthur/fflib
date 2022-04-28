@@ -16,15 +16,16 @@ using namespace ff::mysql;
 define_column(c1, column, uint64_t, "id");
 define_column(xx, column, std::bitset<63>, "id");
 define_column(yy, column, json_m, "MULTIPOINT(0 0, 20 20, 60 60)");
-
+define_column(ts, column, std::chrono::time_point<std::chrono::system_clock>,
+              "ts");
 
 typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, xx, yy>
     mytable;
 
 int main(int argc, char *argv[]) {
 
-  ff::sql::mysql<ff::sql::cppconn> engine("tcp://127.0.0.1:3306", "root", "",
-                                          "test");
+  ff::sql::mysql<ff::sql::cppconn> engine("tcp://127.0.0.1:3306", "test",
+                                          "123456", "testdb");
   try {
     mytable::drop_table(&engine);
   } catch (...) {

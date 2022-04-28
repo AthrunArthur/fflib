@@ -23,6 +23,7 @@
  *************************************************/
 #pragma once
 #include "ff/sql/table_create.h"
+#include <chrono>
 #include <cppconn/sqlstring.h>
 /**
 types method of date, time, datetime, timestamp, year are defined in setDatetime and getString,
@@ -30,6 +31,39 @@ the type defination as one data structure MYSQL_TIME on : usr/include/mysql/mysq
 It seem that the difference of all time type will be separated in the setDatetime and getString.
 The important is how to use these type like time, date in the fflib.
 */
+
+// for timestamp
+namespace ff {
+namespace sql {
+namespace internal {
+template <class T> struct dump_col_type_creation;
+template <typename Clock, typename Rep, std::intmax_t Denom>
+struct dump_col_type_creation<std::chrono::time_point<
+    Clock, std::chrono::duration<Rep, std::ratio<1, Denom>>>> {
+  static void dump(std::stringstream &ss) {
+    ss << " TIMESTAMP (" << Denom << ") ";
+  }
+};
+} // namespace internal
+template <class STMT, class T> struct mysql_bind_setter;
+
+// template <class STMT> struct mysql_bind_setter<STMT,
+// ::ff::mysql::timestamp_m> { static void bind(STMT stmt, int index, const
+// ::ff::mysql::timestamp_m &value) {
+// stmt->setDateTime(index, value.data());
+//}
+//};
+
+// template <class T> struct mysql_rs_getter;
+// template <> struct mysql_rs_getter<::ff::mysql::timestamp_m> {
+// template <typename RST>
+// static ::ff::mysql::timestamp_m get(RST r, const std::string &name) {
+// return ::ff::mysql::timestamp_m(r->getString(name));
+//}
+//};
+
+} // namespace sql
+} // namespace ff
 
 // for time
 namespace ff {
@@ -160,61 +194,3 @@ template <> struct mysql_rs_getter<::ff::mysql::datetime_m>{
 
 
 
-// for timestamp
-namespace ff {
-namespace mysql {
-struct timestamp_m : std::string{
-public:
-  timestamp_m() : std::string(){};
-  timestamp_m(const char *s) : std::string(s){};
-  timestamp_m(const ::sql::SQLString &s) : std::string(s.c_str()){};
-  timestamp_m(const timestamp_m &s) : std::string(s.c_str()){};
-};
-//   inline timestamp_m() : m_data(){};
-//   inline timestamp_m(const char *s) : m_data(s){};
-//   inline timestamp_m(const ::sql::SQLString &s) : m_data(s.c_str()) {}
-//   inline timestamp_m(const timestamp_m &s) : m_data(s.data()) {}
-//   timestamp_m(timestamp_m &&s) : m_data(std::move(s.m_data)) {}
-//   timestamp_m  &operator=(const timestamp_m &s) {
-//     if (&s == this) {
-//       return *this;
-//     }
-//     m_data = s.m_data;
-//     return *this;
-//   };
-
-//   const std::string &data() const { return m_data; }
-//   std::string &data() { return m_data; }
-
-// protected:
-//   std::string m_data;
-// };
-
-} // namespace mysql
-namespace sql {
-namespace internal {
-template <class T> struct dump_col_type_creation;
-template <> struct dump_col_type_creation<::ff::mysql::timestamp_m> {
-  static void dump(std::stringstream &ss) { ss << "TIMESTAMP"; }
-};
-} // namespace internal
-template <class STMT, class T> struct mysql_bind_setter;
-
-template <class STMT>
-struct mysql_bind_setter<STMT, ::ff::mysql::timestamp_m > {
-  static void bind(STMT stmt, int index,
-                   const ::ff::mysql::timestamp_m  &value) {
-    stmt->setDateTime(index, value.data());
-  }
-};
-
-template <class T> struct mysql_rs_getter;
-template <> struct mysql_rs_getter<::ff::mysql::timestamp_m>{
-  template <typename RST>
-  static ::ff::mysql::timestamp_m get(RST r, const std::string &name) {
-    return ::ff::mysql::timestamp_m (r->getString(name));
-  }
-};
-
-} // namespace sql
-} // namespace ff
