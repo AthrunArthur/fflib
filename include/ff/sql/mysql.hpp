@@ -67,51 +67,7 @@ namespace ff
     impl_mysql_bind_setter(uint64_t, setUInt64);
     impl_mysql_bind_setter(double, setDouble);       // double
     impl_mysql_bind_setter(float, setDouble);        // float
-    // impl_mysql_bind_setter(std::istream *, setBlob); // Blob
 
-
-    // impl_mysql_bind_setter();
-    /*    need to add:
-        decimal, tiny/mediumInt
-        set, enum, tinytext, mediumtext, longtext
-        date, time, datetime, timestamp, year
-        geometry and json
-
-
-
-        char, varchar, binary, varbinary,  text,
-        */
-
-/*
-    TINYINT,
-    SMALLINT,
-    REAL,\\=float
-    DOUBLE
-    CHAR,
-    BINARY,
-    VARCHAR,
-    VARBINARY,
-
-    //need to add:
-    TIMESTAMP,
-    DATE,
-    TIME,
-    YEAR,
-
-    BIT,
-    MEDIUMINT,
-
-    *LONGVARCHAR,
-    *LONGVARBINARY,
-    DECIMAL,
-    NUMERIC,
-    ENUM,
-    SET,
-    JSON
-
-    GEOMETRY,
-    SQLNULL,
-    JSON */
 
 #undef impl_mysql_bind_setter
 
