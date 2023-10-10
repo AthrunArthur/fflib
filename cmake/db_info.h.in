@@ -1,0 +1,6 @@
+#pragma once
+
+#define DB_PASSWORD "@DB_PASSWORD@"
+#define DB_USER "@DB_USER@"
+#define DB_CONNECTION "@DB_CONNECTION@"
+#define DB_DATABASENAME  "@DB_DATABASENAME@"

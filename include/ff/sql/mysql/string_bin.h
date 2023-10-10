@@ -68,6 +68,7 @@ namespace ff {
 namespace mysql {
 template <uint32_t Len> struct binary : public std::string {
 public:
+  constexpr static uint32_t len = Len;
   using std::string::string;
   binary(const ::sql::SQLString &s) : std::string(s.asStdString()) {}
 };
@@ -109,6 +110,7 @@ namespace ff {
 namespace mysql {
 template <uint32_t Len> struct var_binary : public std::string {
 public:
+  constexpr static uint32_t len = Len;
   using std::string::string;
   var_binary(const ::sql::SQLString &s) : std::string(s.asStdString()) {}
 };

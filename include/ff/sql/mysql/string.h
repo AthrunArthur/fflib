@@ -30,6 +30,7 @@ namespace ff {
 namespace mysql {
 template <uint8_t Len> struct char_m : public std::string {
 public:
+  constexpr static uint8_t len = Len;
   using std::string::string;
   char_m(const ::sql::SQLString &s) : std::string(s.c_str()) {}
 };
@@ -39,7 +40,9 @@ namespace sql {
 namespace internal {
 template <class T> struct dump_col_type_creation;
 template <uint8_t Len> struct dump_col_type_creation<::ff::mysql::char_m<Len>> {
-  static void dump(std::stringstream &ss) { ss << " CHAR(" << Len << ") "; }
+  static void dump(std::stringstream &ss) {
+    ss << " CHAR(" << (int)Len << ") ";
+  }
 };
 } // namespace internal
 template <class STMT, class T> struct mysql_bind_setter;
@@ -68,6 +71,7 @@ namespace ff {
 namespace mysql {
 template <uint16_t Len> struct varchar_m : public std::string {
 public:
+  constexpr static uint8_t len = Len;
   using std::string::string;
   varchar_m(const ::sql::SQLString &s) : std::string(s.c_str()) {}
 };

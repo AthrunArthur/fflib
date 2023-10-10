@@ -199,6 +199,14 @@ namespace ff
         m_sql_conn->setSchema(m_dbname);
       }
 
+      void drop_database(){
+        if(m_schema_set){
+          std::string sql = std::string("DROP DATABASE IF EXISTS ") + m_dbname + std::string(";");
+          eval_sql_string(sql);
+        }
+        m_schema_set = false;
+      }
+
     protected:
       mysql(mysql<cppconn> *engine)
           : m_sql_driver(engine->m_sql_driver), m_url(engine->m_url), m_usrname(engine->m_usrname), m_passwd(engine->m_passwd), m_dbname(engine->m_dbname), m_is_worker_thread(true)

@@ -15,6 +15,18 @@ include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 link_directories(/usr/local/lib)
 
+set(DB_CONNECTION "tcp://127.0.0.1:3306" CACHE STRING "Test/Example" )
+set(DB_USER "root" CACHE STRING "Test/Example database user name" )
+set(DB_PASSWORD "" CACHE STRING "Test/Example database password" )
+set(DB_DATABASENAME "testdb" CACHE STRING "Test/Example database name" )
+
+
+configure_file("${PROJECT_SOURCE_DIR}/cmake/db_info.h.in" "${PROJECT_SOURCE_DIR}/example/sql/db_info.h")
+configure_file("${PROJECT_SOURCE_DIR}/cmake/db_info.h.in" "${PROJECT_SOURCE_DIR}/test/sql/db_info.h")
+
+option(ENABLE_TEST "enable building test cases" OFF)
+option(ENABLE_EXAMPLE "enable building examples" OFF)
+
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 
@@ -63,9 +75,31 @@ INSTALL(TARGETS functionflow_static DESTINATION lib)
 INSTALL(TARGETS net_dynamic DESTINATION lib)
 INSTALL(TARGETS net_static DESTINATION lib)
 
-if(Release)
-else()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
-add_subdirectory(example)
+
+option(DB_CONNECTION "Test/Example" "tcp://127.0.0.1:3306")
+option(DB_USER "Test/Example database user name" "root")
+option(DB_PASSWORD "Test/Example database password" )
+option(DB_DATABASENAME "Test/Example database name" "testdb")
+
+if(ENABLE_TEST OR ENABLE_EXAMPLE)
+  message(STATUS "DB connection(DB_CONNECTION): " ${DB_CONNECTION})
+  message(STATUS "DB username(DB_USER): " ${DB_USER})
+  message(STATUS "DB password(DB_PASSWORD): " ${DB_PASSWORD})
+  message(STATUS "DB database name(DB_DATABASE_NAME): " ${DB_DATABASENAME})
+endif()
+
+if(ENABLE_TEST)
+  message(STATUS "ENABLE_TEST ON")
+  add_subdirectory(test)
+else()
+  message(STATUS "ENABLE_TEST OFF")
+endif()
+
+if(ENABLE_EXAMPLE)
+  message(STATUS "ENABLE_EXAMPLE ON")
+  add_subdirectory(example)
+else()
+  message(STATUS "ENABLE_TEST OFF")
 endif()

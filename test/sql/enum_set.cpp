@@ -1,3 +1,4 @@
+#include "db_info.h"
 #include "ff/sql/mysql.hpp"
 #include "ff/sql/table.h"
 
@@ -22,8 +23,8 @@ typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, c2, sex,
 
 int main(int argc, char *argv[]) {
 
-  ff::sql::mysql<ff::sql::cppconn> engine("tcp://127.0.0.1:3306", "test",
-                                          "123456", "testdb");
+  ff::sql::mysql<ff::sql::cppconn> engine(DB_CONNECTION, DB_USER, DB_PASSWORD,
+                                          DB_DATABASENAME);
   try {
     mytable::drop_table(&engine);
   } catch (...) {

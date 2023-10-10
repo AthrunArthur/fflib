@@ -58,31 +58,26 @@ template <> struct get_key_column_type<ff::util::type_list<>> {
 } // namespace sql
 } // namespace ff
 
-#define define_column(_name, _type, _dtype, _tname)                            \
-  struct _name : public ::ff::sql::_type<_dtype> {                             \
-    constexpr static const char *name = _tname;                                \
-    /* solve error: conversion from ‘const istream* to const istream* */       \
-    static ff::sql::eq_cond_stmt<_name> eq(_dtype const &value) {              \
-      return ff::sql::eq_cond_stmt<_name>(value);                              \
-    }                                                                          \
-    static ff::sql::ne_cond_stmt<_name> ne(_dtype const &value) {              \
-      return ff::sql::ne_cond_stmt<_name>(value);                              \
-    }                                                                          \
-    static ff::sql::le_cond_stmt<_name> le(_dtype const &value) {              \
-      return ff::sql::le_cond_stmt<_name>(value);                              \
-    }                                                                          \
-    static ff::sql::ge_cond_stmt<_name> ge(_dtype const &value) {              \
-      return ff::sql::ge_cond_stmt<_name>(value);                              \
-    }                                                                          \
-  };                                                                           \
-  namespace ff {                                                               \
-  namespace util {                                                             \
-  namespace internal {                                                         \
-  template <> struct nt_traits<_name> {                                        \
-    constexpr static const char *name = _tname;                                \
-    typedef _dtype type;                                                       \
-  };                                                                           \
-  }                                                                            \
-  }                                                                            \
-  }
-
+#define define_column(_name, _type, _dtype, _tname)                             \
+  struct _name : public ::ff::sql::_type<_dtype> {                              \
+    constexpr static const char *name = _tname;                                 \
+    /* solve error: conversion from ‘const istream* to const istream* */      \
+    static ff::sql::eq_cond_stmt<_name> eq(_dtype const &value) {               \
+      return ff::sql::eq_cond_stmt<_name>(value);                               \
+    }                                                                           \
+    static ff::sql::ne_cond_stmt<_name> ne(_dtype const &value) {               \
+      return ff::sql::ne_cond_stmt<_name>(value);                               \
+    }                                                                           \
+    static ff::sql::le_cond_stmt<_name> le(_dtype const &value) {               \
+      return ff::sql::le_cond_stmt<_name>(value);                               \
+    }                                                                           \
+    static ff::sql::ge_cond_stmt<_name> ge(_dtype const &value) {               \
+      return ff::sql::ge_cond_stmt<_name>(value);                               \
+    }                                                                           \
+    /*compatiable to ff::util::internal::nt_traits */                           \
+    constexpr static const char *                                               \
+        name_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a = \
+            _tname;                                                             \
+    typedef _dtype                                                              \
+        type_231bee33a5b2ee95e1b417bb350ea5c6b89aad1d81181b805e5ec957d9cea04a;  \
+  };
