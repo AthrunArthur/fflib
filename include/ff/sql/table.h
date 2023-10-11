@@ -22,6 +22,7 @@
   THE SOFTWARE.
  *************************************************/
 #pragma once
+#include "ff/sql/check/check_table.h"
 #include "ff/sql/columns.h"
 #include "ff/sql/common.h"
 #include "ff/sql/engine.h"
@@ -34,7 +35,8 @@
 namespace ff {
 namespace sql {
 
-template <typename ET, typename TM, typename... ARGS> class table {
+template <typename ET, typename TM, typename... ARGS>
+class table : private check_table<ET, TM, ARGS...> {
 public:
   typedef ET engine_type;
   typedef TM meta_type;

@@ -31,7 +31,7 @@ struct mymeta {
 };
 
 define_column(c1, column, uint64_t, "id");
-define_column(c2, key, std::string, "event");
+define_column(c2, key, ff::mysql::char_m<64>, "event");
 define_column(c3, index, uint64_t, "ts");
 
 typedef ff::sql::table<ff::sql::mysql<ff::sql::cppconn>, mymeta, c1, c2, c3>

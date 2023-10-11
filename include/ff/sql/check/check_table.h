@@ -1,7 +1,7 @@
 /***********************************************
   The MIT License (MIT)
 
-  Copyright (c) 2012 Athrun Arthur <athrunarthur@gmail.com>
+  Copyright (c) 2023 Athrun Arthur <athrunarthur@gmail.com>
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,11 @@
   THE SOFTWARE.
  *************************************************/
 #pragma once
-#include "ff/sql/columns.h"
-#include "ff/sql/join.h"
-#include "ff/sql/mysql.hpp"
-#include "ff/sql/rows.h"
-#include "ff/sql/stmt.h"
-#include "ff/sql/table.h"
-#include "ff/util/ntobject.h"
-
+#include "ff/sql/check/key_index.h"
 namespace ff {
 namespace sql {
-using default_engine = mysql<cppconn>;
-
-template <typename TM, typename... ARGS>
-using default_table = table<default_engine, TM, ARGS...>;
-
+template <typename ET, typename TM, typename... ARGS>
+class check_table : public check_key_index<ET, TM, ARGS...> {};
+// class check_table {};
 } // namespace sql
 } // namespace ff

@@ -62,6 +62,7 @@ template <> struct nt_extract_content_type_list<type_list<>> {
   typedef type_list<> type;
 };
 
+template <typename T> using nt_traits = internal::nt_traits<T>;
 } // namespace util
 } // namespace ff
 

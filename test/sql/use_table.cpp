@@ -22,6 +22,7 @@
   THE SOFTWARE.
  *************************************************/
 #include "db_info.h"
+#include "ff/sql.h"
 #include "ff/sql/mysql.hpp"
 #include "ff/sql/table.h"
 

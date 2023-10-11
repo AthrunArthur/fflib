@@ -314,9 +314,5 @@ namespace ff
       std::thread::id m_local_thread_id;
     };
 
-    using default_engine = mysql<cppconn>;
-
-    template <typename TM, typename... ARGS>
-    using default_table = table<default_engine, TM, ARGS...>;
   } // namespace sql
 } // namespace ff

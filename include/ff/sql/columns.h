@@ -36,14 +36,22 @@ template <typename T> class index : public column_base<T> {};
 
 template <typename T> class key : public column_base<T> {};
 
-// template <typename TT, typename CT> struct table_column {
-// typedef TT table_type;
-// typedef CT column_type;
-// typedef typename CT::type type;
-//};
+template <typename T> struct is_key {
+  template <typename DT> static constexpr std::true_type test(const key<DT> *);
+  static constexpr std::false_type test(...);
+  using type = decltype(test(std::declval<T *>()));
+  static constexpr bool value = type::value;
+};
+
+template <typename T> struct is_index {
+  template <typename DT>
+  static constexpr std::true_type test(const index<DT> *);
+  static constexpr std::false_type test(...);
+  using type = decltype(test(std::declval<T *>()));
+  static constexpr bool value = type::value;
+};
 
 template <typename TL> struct get_key_column_type {};
-
 template <typename T, typename... TS>
 struct get_key_column_type<ff::util::type_list<T, TS...>> {
   typedef typename std::conditional<
@@ -51,7 +59,6 @@ struct get_key_column_type<ff::util::type_list<T, TS...>> {
       typename get_key_column_type<ff::util::type_list<TS...>>::type>::type
       type;
 };
-
 template <> struct get_key_column_type<ff::util::type_list<>> {
   typedef void type;
 };

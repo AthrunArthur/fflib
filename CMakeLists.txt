@@ -23,6 +23,7 @@ set(DB_DATABASENAME "testdb" CACHE STRING "Test/Example database name" )
 
 configure_file("${PROJECT_SOURCE_DIR}/cmake/db_info.h.in" "${PROJECT_SOURCE_DIR}/example/sql/db_info.h")
 configure_file("${PROJECT_SOURCE_DIR}/cmake/db_info.h.in" "${PROJECT_SOURCE_DIR}/test/sql/db_info.h")
+configure_file("${PROJECT_SOURCE_DIR}/cmake/db_info.h.in" "${PROJECT_SOURCE_DIR}/compile_failed_test/db_info.h")
 
 option(ENABLE_TEST "enable building test cases" OFF)
 option(ENABLE_EXAMPLE "enable building examples" OFF)

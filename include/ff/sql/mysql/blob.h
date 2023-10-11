@@ -55,6 +55,11 @@ using blob = blob_m<blob_flag>;
 using medium_blob = blob_m<medium_blob_flag>;
 using long_blob = blob_m<long_blob_flag>;
 
+template <typename T> struct is_blob { constexpr static bool value = false; };
+template <typename T> struct is_blob<blob_m<T>> {
+  constexpr static bool value = true;
+};
+
 } // namespace mysql
 namespace sql {
 namespace internal {
