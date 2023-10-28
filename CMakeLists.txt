@@ -48,6 +48,13 @@ else()
   message(STATUS "not found protobuf, gonna ignore protobuf support")
 endif()
 
+set(CPACK_PACKAGE_NAME "fflib")
+set(CPACK_PACKAGE_VENDOR "YeeZTech")
+set(CPACK_PACKAGE_CONTACT "fidelius@yeez.tech")
+set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+
+include(CPack)
+
 MACRO(INSTALL_HEADERS_WITH_DIRECTORY HEADER_LIST)
   FOREACH(HEADER ${${HEADER_LIST}})
     STRING(REPLACE "${PROJECT_SOURCE_DIR}/" "" RPATH ${HEADER})
